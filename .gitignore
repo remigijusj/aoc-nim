@@ -1,4 +1,5 @@
 *.exe
+session.txt
 nimcache/
-nimblecache/
-htmldocs/
+bin/cache/
+

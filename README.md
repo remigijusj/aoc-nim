@@ -1,14 +1,19 @@
-# aoc-2021
+# aoc-nim
 
-Advent of Code 2021
-
-Also some challenges from previous years.
+Advent of Code in Nim
 
 ## Running scripts
 
-For each day, you can run the script with current (v1.6.0) Nim compiler, for example: `nim c -r d01`.
+Code compiles with the current (v1.6.0) Nim compiler, for example: `nim c -r d01`.
 
-Sub-folders contain:
-- docs - description of challenges
-- inputs - (my personal) input data
-- results - (my personal) solution answers
+### Structure
+
+`bin/aoc` is a helper tool to download puzzles & inputs, prepare template.
+AoC session cookie is expected to be saved in the file `session.txt` (just the value).
+Puzzle parsing depends on the [html2md](https://github.com/suntong/html2md) tool.
+
+Sub-folders for each year contain:
+- `puzzles` - description of AoC puzzles
+- `inputs` - (my personal) input data
+- `answers` - (my personal) solution answers
+- solutions code
