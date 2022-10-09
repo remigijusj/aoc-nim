@@ -87,6 +87,7 @@ proc runCommand(args: seq[string]) =
     printHelp()
 
 
+# Example: aoc p 1 2019
 when isMainModule:
   try:
     runCommand(commandLineParams())
