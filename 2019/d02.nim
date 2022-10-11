@@ -18,7 +18,7 @@ proc initIntcode(data: Data, noun, verb: int): Intcode =
 
 proc partOne(data: Data): int =
   var ic = data.initIntcode(12, 2)
-  return ic.run
+  return ic.run1
 
 
 proc partTwo(data: Data): int =
@@ -26,7 +26,7 @@ proc partTwo(data: Data): int =
   for noun in 0..99:
     for verb in 0..99:
       ic = data.initIntcode(noun, verb)
-      if ic.run == 19690720:
+      if ic.run1 == 19690720:
         return noun * 100 + verb
 
 
