@@ -12,20 +12,22 @@ proc parseData(filename: string): Data =
 
 proc initIntcode(data: Data, noun, verb: int): Intcode =
   result = data.toIntcode
-  result.set(noun, 1)
-  result.set(verb, 2)
+  result.setVal(noun, 1)
+  result.setVal(verb, 2)
 
 
 proc partOne(data: Data): int =
   var ic = data.initIntcode(12, 2)
-  return ic.run1
+  discard ic.run
+  result = ic.getVal(0)
 
 
 proc partTwo(data: Data): int =
   for noun in 0..99:
     for verb in 0..99:
       var ic = data.initIntcode(noun, verb)
-      if ic.run1 == 19690720:
+      discard ic.run
+      if ic.getVal(0) == 19690720:
         return noun * 100 + verb
 
 
