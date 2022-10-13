@@ -1,90 +1,138 @@
-import std/[strutils]
+import std/deques
+from std/sequtils import toSeq
 
-type Intcode* = seq[int]
+type Intcode* = object
+  data: seq[int]
+  iptr: int
+  input*: ref Deque[int]
+  output*: ref Deque[int]
+  halted: bool
+
+type Opcode* = enum
+  oAdd         = 1
+  oMultiply    = 2
+  oInput       = 3
+  oOutput      = 4
+  oJumpIfTrue  = 5
+  oJumpIfFalse = 6
+  oLessThan    = 7
+  oEquals      = 8
+  oHalt        = 99
+
+type Opmode = enum
+  mPosition  = 0
+  mImmediate = 1
+
+type Op = tuple
+  opcode: Opcode
+  modes: array[2, Opmode]
+
+
+proc toIntcode*(data: seq[int]): Intcode =
+  result.data = data
+  result.input = new Deque[int]
+  result.output = new Deque[int]
+
+proc addInput*(ic: var Intcode, values: varargs[int]) =
+  for val in values:
+    ic.input[].addLast(val)
+
+proc getOutput*(ic: Intcode): seq[int] =
+  ic.output[].toSeq
+
+# Pointer in bounds and no halt opcode so far
+proc active*(ic: Intcode): bool =
+  ic.iptr >= 0 and ic.iptr < ic.data.len and not ic.halted
+
+proc get*(ic: Intcode, delta = 0): int {.inline.} = ic.data[ic.iptr + delta]
+
+proc set*(ic: var Intcode, val: int, idx: int) {.inline.} = ic.data[idx] = val
+
+proc move(ic: var Intcode, delta: int) {.inline.} = ic.iptr.inc(delta)
+
+proc popInput(ic: var Intcode): int {.inline.} = ic.input[].popFirst
+
+proc addOutput(ic: var Intcode, val: int) {.inline.} = ic.output[].addLast(val)
+
+
+proc parseOp(val: int): Op =
+  result.opcode = Opcode(val mod 100) # warning: HoleEnumConv
+
+  var val = val div 100
+  for i in 0..1:
+    result.modes[i] = Opmode(val mod 10)
+    val = val div 10
+
+
+proc getArg(ic: Intcode, delta: int, op: Op): int =
+  let val = ic.get(delta)
+  case op.modes[delta - 1]
+  of mPosition:
+    result = ic.data[val]
+  of mImmediate:
+    result = val
+
+
+proc step*(ic: var Intcode): Opcode =
+  let op = parseOp(ic.get)
+  result = op.opcode
+  case op.opcode
+
+  of oAdd:
+    ic.set(ic.getArg(1, op) + ic.getArg(2, op), ic.get(3))
+    ic.move(4)
+
+  of oMultiply:
+    ic.set(ic.getArg(1, op) * ic.getArg(2, op), ic.get(3))
+    ic.move(4)
+
+  of oInput:
+    ic.set(ic.popInput, ic.get(1))
+    ic.move(2)
+
+  of oOutput:
+    ic.addOutput(ic.getArg(1, op))
+    ic.move(2)
+
+  of oJumpIfTrue:
+    if ic.getArg(1, op) != 0:
+      ic.iptr = ic.getArg(2, op)
+    else:
+      ic.move(3)
+
+  of oJumpIfFalse:
+    if ic.getArg(1, op) == 0:
+      ic.iptr = ic.getArg(2, op)
+    else:
+      ic.move(3)
+
+  of oLessThan:
+    let val = if ic.getArg(1, op) < ic.getArg(2, op): 1 else: 0
+    ic.set(val, ic.get(3))
+    ic.move(4)
+
+  of oEquals:
+    let val = if ic.getArg(1, op) == ic.getArg(2, op): 1 else: 0
+    ic.set(val, ic.get(3))
+    ic.move(4)
+
+  of oHalt:
+    ic.halted = true
 
 
 # run Intcode program and return memory value at address 0
 proc run1*(ic: var Intcode): int =
-  var iptr: int
+  while ic.active:
+    discard ic.step
 
-  while iptr < ic.len:
-    case ic[iptr]
-    of 1:
-      ic[ic[iptr + 3]] = ic[ic[iptr + 1]] + ic[ic[iptr + 2]]
-      iptr.inc(4)
-    of 2:
-      ic[ic[iptr + 3]] = ic[ic[iptr + 1]] * ic[ic[iptr + 2]]
-      iptr.inc(4)
-    of 99:
-      break
-    else:
-      raise newException(AssertionDefect, format("Invalid code at $#: $#", iptr, ic[iptr]))
-
-  result = ic[0]
+  result = ic.data[0]
 
 
-proc parseOp(opcode: int): tuple[opcode: int, modes: seq[int]] =
-  result.opcode = opcode mod 100
-  result.modes = @[result.opcode] # 1st mode is the opcode
-  var val = opcode div 100
-  while val > 0:
-    result.modes.add val mod 10
-    val = val div 10
-  while result.modes.len < 4:
-    result.modes.add 0
+# run Intcode program and return all outputs
+proc run2*(ic: var Intcode, input: varargs[int]): seq[int] =
+  ic.addInput(input)
 
+  while ic.active:
+    discard ic.step
 
-proc getArg(ic: Intcode, delta, iptr: int, modes: seq[int]): int =
-  let val = ic[iptr + delta]
-  case modes[delta]
-  of 0: result = ic[val]
-  of 1: result = val
-  else:
-    raise newException(AssertionDefect, format("Invalid opcode mode on $# ($#): $#", iptr, delta, modes[delta]))
-
-
-# run Intcode program and return outputs list
-proc run2*(ic: var Intcode, input: seq[int], debug = false): seq[int] =
-  var iptr, inptr: int
-
-  while iptr < ic.len:
-    let (opcode, modes) = parseOp(ic[iptr])
-    if debug:
-      echo (iptr, ic[iptr], opcode, modes, result)
-
-    case opcode
-    of 1: # add
-      ic[ic[iptr + 3]] = ic.getArg(1, iptr, modes) + ic.getArg(2, iptr, modes)
-      iptr.inc(4)
-    of 2: # multiply
-      ic[ic[iptr + 3]] = ic.getArg(1, iptr, modes) * ic.getArg(2, iptr, modes)
-      iptr.inc(4)
-    of 3: # input
-      ic[ic[iptr + 1]] = input[inptr]
-      iptr.inc(2)
-      inptr.inc
-    of 4: # output
-      result.add ic.getArg(1, iptr, modes)
-      iptr.inc(2)
-    of 5: # jump-if-true
-      if ic.getArg(1, iptr, modes) != 0:
-        iptr = ic.getArg(2, iptr, modes)
-      else:
-        iptr.inc(3)
-    of 6: # jump-if-false
-      if ic.getArg(1, iptr, modes) == 0:
-        iptr = ic.getArg(2, iptr, modes)
-      else:
-        iptr.inc(3)
-    of 7: # less than
-      let val = if ic.getArg(1, iptr, modes) < ic.getArg(2, iptr, modes): 1 else: 0
-      ic[ic[iptr + 3]] = val
-      iptr.inc(4)
-    of 8: # equals
-      let val = if ic.getArg(1, iptr, modes) == ic.getArg(2, iptr, modes): 1 else: 0
-      ic[ic[iptr + 3]] = val
-      iptr.inc(4)
-    of 99: # halt
-      break
-    else:
-      raise newException(AssertionDefect, format("Invalid code at $#: $#", iptr, ic[iptr]))
+  result = ic.getOutput
