@@ -1,12 +1,14 @@
 import std/deques
 from std/sequtils import toSeq
+from math import `^`
 
 type Intcode* = object
-  data: seq[int]
-  iptr: int
-  input*: ref Deque[int]
+  data:    seq[int]
+  iptr:    int
+  input*:  ref Deque[int]
   output*: ref Deque[int]
-  halted: bool
+  relbase: int
+  halted*:  bool
 
 type Opcode* = enum
   oAdd         = 1
@@ -17,15 +19,13 @@ type Opcode* = enum
   oJumpIfFalse = 6
   oLessThan    = 7
   oEquals      = 8
+  oAddRelBase  = 9
   oHalt        = 99
 
 type Opmode = enum
   mPosition  = 0
   mImmediate = 1
-
-type Op = tuple
-  opcode: Opcode
-  modes: array[2, Opmode]
+  mRelative  = 2
 
 
 proc toIntcode*(data: seq[int]): Intcode =
@@ -33,106 +33,101 @@ proc toIntcode*(data: seq[int]): Intcode =
   result.input = new Deque[int]
   result.output = new Deque[int]
 
+
+# only external usage
+proc getVal*(ic: var Intcode, idx: int): int =
+  ic.data[idx]
+
+# only external usage
+proc setVal*(ic: var Intcode, val: int, idx: int) =
+  ic.data[idx] = val
+
 proc addInput*(ic: var Intcode, values: varargs[int]) =
   for val in values:
     ic.input[].addLast(val)
 
-proc getOutput*(ic: Intcode): seq[int] =
-  ic.output[].toSeq
+proc popInput(ic: var Intcode): int =
+  ic.input[].popFirst
 
-# Pointer in bounds and no halt opcode so far
-proc active*(ic: Intcode): bool =
-  ic.iptr >= 0 and ic.iptr < ic.data.len and not ic.halted
-
-proc get*(ic: Intcode, delta = 0): int {.inline.} = ic.data[ic.iptr + delta]
-
-proc set*(ic: var Intcode, val: int, idx: int) {.inline.} = ic.data[idx] = val
-
-proc move(ic: var Intcode, delta: int) {.inline.} = ic.iptr.inc(delta)
-
-proc popInput(ic: var Intcode): int {.inline.} = ic.input[].popFirst
-
-proc addOutput(ic: var Intcode, val: int) {.inline.} = ic.output[].addLast(val)
+proc addOutput(ic: var Intcode, val: int) =
+  ic.output[].addLast(val)
 
 
-proc parseOp(val: int): Op =
-  result.opcode = Opcode(val mod 100) # warning: HoleEnumConv
-
-  var val = val div 100
-  for i in 0..1:
-    result.modes[i] = Opmode(val mod 10)
-    val = val div 10
+proc move(ic: var Intcode, delta: int) {.inline.} =
+  ic.iptr.inc(delta)
 
 
-proc getArg(ic: Intcode, delta: int, op: Op): int =
-  let val = ic.get(delta)
-  case op.modes[delta - 1]
-  of mPosition:
-    result = ic.data[val]
-  of mImmediate:
-    result = val
+template mem(offset): int =
+  let mode = Opmode((ic.data[ic.iptr] div 10^(offset + 1)) mod 10)
+  let pos = case mode
+    of mImmediate: ic.iptr + offset
+    of mPosition:  ic.data[ic.iptr + offset]
+    of mRelative:  ic.data[ic.iptr + offset] + ic.relbase
+
+  ic.data.setLen(max(ic.data.len, pos + 1))
+  ic.data[pos]
 
 
 proc step*(ic: var Intcode): Opcode =
-  let op = parseOp(ic.get)
-  result = op.opcode
-  case op.opcode
+  result = Opcode(ic.data[ic.iptr] mod 100) # warning: HoleEnumConv
+  case result
 
   of oAdd:
-    ic.set(ic.getArg(1, op) + ic.getArg(2, op), ic.get(3))
+    mem(3) = mem(1) + mem(2)
     ic.move(4)
 
   of oMultiply:
-    ic.set(ic.getArg(1, op) * ic.getArg(2, op), ic.get(3))
+    mem(3) = mem(1) * mem(2)
     ic.move(4)
 
   of oInput:
-    ic.set(ic.popInput, ic.get(1))
+    mem(1) = ic.popInput
     ic.move(2)
 
   of oOutput:
-    ic.addOutput(ic.getArg(1, op))
+    ic.addOutput(mem(1))
     ic.move(2)
 
   of oJumpIfTrue:
-    if ic.getArg(1, op) != 0:
-      ic.iptr = ic.getArg(2, op)
+    if mem(1) != 0:
+      ic.iptr = mem(2)
     else:
       ic.move(3)
 
   of oJumpIfFalse:
-    if ic.getArg(1, op) == 0:
-      ic.iptr = ic.getArg(2, op)
+    if mem(1) == 0:
+      ic.iptr = mem(2)
     else:
       ic.move(3)
 
   of oLessThan:
-    let val = if ic.getArg(1, op) < ic.getArg(2, op): 1 else: 0
-    ic.set(val, ic.get(3))
+    mem(3) = int(mem(1) < mem(2))
     ic.move(4)
 
   of oEquals:
-    let val = if ic.getArg(1, op) == ic.getArg(2, op): 1 else: 0
-    ic.set(val, ic.get(3))
+    mem(3) = int(mem(1) == mem(2))
     ic.move(4)
+
+  of oAddRelBase:
+    ic.relbase += mem(1)
+    ic.move(2)
 
   of oHalt:
     ic.halted = true
 
 
-# run Intcode program and return memory value at address 0
-proc run1*(ic: var Intcode): int =
-  while ic.active:
-    discard ic.step
-
-  result = ic.data[0]
-
-
 # run Intcode program and return all outputs
-proc run2*(ic: var Intcode, input: varargs[int]): seq[int] =
+proc run*(ic: var Intcode, input: varargs[int]): seq[int] =
   ic.addInput(input)
 
-  while ic.active:
+  while not ic.halted:
     discard ic.step
 
-  result = ic.getOutput
+  result = ic.output[].toSeq
+
+
+proc runIntcode*(data: seq[int], input: varargs[int]): int =
+  var ic = data.toIntcode
+  let output = ic.run(input)
+  assert output.len == 1
+  result = output[^1]

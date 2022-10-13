@@ -1,6 +1,6 @@
 # Advent of Code 2019 - Day 7
 
-import std/[strutils, sequtils, algorithm], intcode
+import std/[strutils, sequtils, algorithm, deques], intcode
 
 type Data = seq[int]
 
@@ -14,7 +14,7 @@ proc parseData(filename: string): Data =
 proc simulateSimple(data: Data, phases: Phases): int =
   for phase in phases:
     var ic = data.toIntcode
-    let output = ic.run2(phase, result)
+    let output = ic.run(phase, result)
     assert output.len == 1
     result = output[0]
 
@@ -34,11 +34,11 @@ proc setupChain(data: Data, phases: Phases): array[5, Intcode] =
 proc simulateFeedback(data: Data, phases: Phases): int =
   var chain = setupChain(data, phases)
   var i = 0
-  while chain[i].active:
+  while not chain[i].halted:
     if chain[i].step == oOutput:
       i = (i + 1) %% 5
 
-  result = chain[^1].getOutput[^1]
+  result = chain[^1].output[].popLast
 
 
 proc maxSignal(data: Data, phases: Phases, simulate: proc(data: Data, phases: Phases): int): int =
