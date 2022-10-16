@@ -42,6 +42,10 @@ proc getVal*(ic: var Intcode, idx: int): int =
 proc setVal*(ic: var Intcode, val: int, idx: int) =
   ic.data[idx] = val
 
+# only external usage
+proc popOutput*(ic: var Intcode): int =
+  ic.output[].popLast
+
 proc addInput*(ic: var Intcode, values: varargs[int]) =
   for val in values:
     ic.input[].addLast(val)
