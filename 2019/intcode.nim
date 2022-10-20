@@ -130,8 +130,16 @@ proc run*(ic: var Intcode, input: varargs[int]): seq[int] =
   result = ic.output[].toSeq
 
 
+# convert to Intcode and return it's single output
 proc runIntcode*(data: seq[int], input: varargs[int]): int =
   var ic = data.toIntcode
   let output = ic.run(input)
   assert output.len == 1
   result = output[^1]
+
+
+# run Intcode program until one output and return it
+proc getOutput*(ic: var Intcode): int =
+  while not ic.halted:
+    if ic.step == oOutput:
+      return ic.popOutput
