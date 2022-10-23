@@ -139,7 +139,8 @@ proc runIntcode*(data: seq[int], input: varargs[int]): int =
 
 
 # run Intcode program until one output and return it
-proc getOutput*(ic: var Intcode): int =
+proc getOutput*(ic: var Intcode, input: varargs[int]): int =
+  ic.addInput(input)
   while not ic.halted:
     if ic.step == oOutput:
       return ic.popOutput
