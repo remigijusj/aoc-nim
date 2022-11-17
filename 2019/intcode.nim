@@ -8,7 +8,8 @@ type Intcode* = object
   input*:  ref Deque[int]
   output*: ref Deque[int]
   relbase: int
-  halted*:  bool
+  halted*: bool
+  idle*:   bool
 
 type Opcode* = enum
   oAdd         = 1
@@ -49,6 +50,8 @@ proc popOutput*(ic: var Intcode): int =
 proc addInput*(ic: var Intcode, values: varargs[int]) =
   for val in values:
     ic.input[].addLast(val)
+  if ic.input[].len > 0:
+    ic.idle = false
 
 proc popInput(ic: var Intcode): int =
   ic.input[].popFirst
@@ -85,8 +88,11 @@ proc step*(ic: var Intcode): Opcode =
     ic.move(4)
 
   of oInput:
-    mem(1) = ic.popInput
-    ic.move(2)
+    if ic.input[].len == 0:
+      ic.idle = true
+    else:
+      mem(1) = ic.popInput
+      ic.move(2)
 
   of oOutput:
     ic.addOutput(mem(1))
@@ -124,7 +130,7 @@ proc step*(ic: var Intcode): Opcode =
 proc run*(ic: var Intcode, input: varargs[int]): seq[int] =
   ic.addInput(input)
 
-  while not ic.halted:
+  while not ic.halted and not ic.idle:
     discard ic.step
 
   result = ic.output[].toSeq
