@@ -1,18 +1,18 @@
 # Advent of Code {year} - Day {day}
 
-import std/[strutils]
+import std/[strutils,sequtils,sugar]
 
 type Data = seq[string]
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
-    result.add line
+proc parseData: Data =
+  readAll(stdin).strip(leading=false).splitLines
 
 
-proc partOne(data: Data): int = 0
-proc partTwo(data: Data): int = 0
+let data = parseData()
 
-let data = parseData("inputs/{day:02}.txt")
-echo partOne(data)
-echo partTwo(data)
+let part1 = 0
+let part2 = 0
+
+echo part1
+echo part2
