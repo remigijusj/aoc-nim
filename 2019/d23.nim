@@ -37,7 +37,7 @@ proc run(network: var Network, short = false): int =
       if ic.input[].len == 0:
         ic.addInput(-1)
 
-      discard ic.run
+      discard ic.run(keep=true)
 
       if ic.output[].len > 0:
         let (y, x, d) = (ic.popOutput, ic.popOutput, ic.popOutput)

@@ -127,13 +127,15 @@ proc step*(ic: var Intcode): Opcode =
 
 
 # run Intcode program and return all outputs
-proc run*(ic: var Intcode, input: varargs[int]): seq[int] =
+proc run*(ic: var Intcode, input: varargs[int], keep = false): seq[int] =
   ic.addInput(input)
 
   while not ic.halted and not ic.idle:
     discard ic.step
 
   result = ic.output[].toSeq
+  if not keep:
+    ic.output[].clear
 
 
 # convert to Intcode and return it's single output

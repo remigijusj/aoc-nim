@@ -14,7 +14,7 @@ proc parseData(filename: string): Data =
 proc simulateSimple(data: Data, phases: Phases): int =
   for phase in phases:
     var ic = data.toIntcode
-    let output = ic.run(phase, result)
+    let output = ic.run(phase, result, keep=true)
     assert output.len == 1
     result = output[0]
 
