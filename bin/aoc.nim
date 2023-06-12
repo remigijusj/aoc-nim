@@ -4,8 +4,9 @@ type YearDay = tuple[year, day: int]
 
 proc getYearDay(args: seq[string]): YearDay =
   let time = now().utc
+  let cdir = lastPathPart(getCurrentDir())
   let day  = if args.len > 0: args[0].parseInt else: time.monthday
-  var year = if args.len > 1: args[1].parseInt else: time.year
+  var year = if args.len > 1: args[1].parseInt elif cdir.startsWith("20"): cdir.parseInt else: time.year
   if year < 2000: year = 2000 + year
   result = (year, day)
 
@@ -54,7 +55,7 @@ proc prepAnswers(yd: YearDay) =
   createDir(getPath(fmt"{yd.year}/answers"))
   let answers = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(answers):
-    writeFile(answers, "")
+    writeFile(answers, "0\n0\n")
 
 
 proc compileProgram(yd: YearDay) =

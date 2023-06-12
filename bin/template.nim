@@ -1,18 +1,15 @@
 # Advent of Code {year} - Day {day}
 
-import std/[strutils,sequtils,sugar]
+import std/[strutils,sequtils]
 
 type Data = seq[string]
 
 
 proc parseData: Data =
-  readAll(stdin).strip(leading=false).splitLines
+  readAll(stdin).strip.splitLines
 
 
 let data = parseData()
 
-let part1 = 0
-let part2 = 0
-
-echo part1
-echo part2
+echo 0
+echo 0
