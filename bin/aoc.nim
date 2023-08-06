@@ -1,6 +1,16 @@
 import std/[httpclient, os, osproc, strformat, tempfiles, strutils, times]
 
-type YearDay = tuple[year, day: int]
+type
+  YearDay = tuple[year, day: int]
+
+
+proc getCmdOpts(arg: string): (string, string) =
+  for c in arg:
+    if c.isUpperAscii:
+      result[1].add(c)
+    else:
+      result[0].add(c)
+
 
 proc getYearDay(args: seq[string]): YearDay =
   let time = now().utc
@@ -58,9 +68,10 @@ proc prepAnswers(yd: YearDay) =
     writeFile(answers, "0\n0\n")
 
 
-proc compileProgram(yd: YearDay) =
+proc compileProgram(yd: YearDay, opt: string) =
   echo fmt"Compiling d{yd.day:02}..."
-  let outputs = execProcess(fmt"nim c d{yd.day:02}.nim", getPath(fmt"{yd.year}"))
+  var compile = if 'R' in opt: "-d:release" else: ""
+  let outputs = execProcess(fmt"nim c {compile} d{yd.day:02}.nim", getPath(fmt"{yd.year}"))
   if not contains(outputs, "[SuccessX]"):
     echo outputs
 
@@ -89,18 +100,20 @@ proc testAnswers(yd: YearDay) =
 
 proc printHelp() =
   echo """
-Usage: aoc [pitcerx] [day] [year]
-  Commands: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check)
+Usage: aoc [pitcerxR] [day] [year]
+  Command: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check)
+  Options: R(elease)
   Warning: "e" command doesn't work in years 2019-2021"""
 
 
-proc runSteps(steps: string, yd: YearDay) =
+# Steps are lowercase, Opts are uppercase
+proc runSteps(steps: string, yd: YearDay, opts: string) =
   for step in steps:
     case step:
       of 'p': fetchAocPage(yd).parsePuzzle.saveFile(yd, "puzzles")
       of 'i': fetchAocPage(yd, "/input").saveFile(yd, "inputs")
       of 't': copyTemplate(yd); prepAnswers(yd)
-      of 'c': compileProgram(yd)
+      of 'c': compileProgram(yd, opts)
       of 'e': echo runProgram(yd, true)
       of 'r': echo runProgram(yd)
       of 'x': testAnswers(yd)
@@ -110,9 +123,9 @@ proc runSteps(steps: string, yd: YearDay) =
 # DEBUG: echo readFile(fmt"cache/{yd.year}{yd.day:02}.htm").parsePuzzle
 proc runCommands(args: seq[string]) =
   if args.len > 0:
-    let cmd = args[0]
+    let (cmd, opt) = getCmdOpts(args[0])
     let yd = getYearDay(args[1..^1])
-    runSteps(cmd, yd)
+    runSteps(cmd, yd, opt)
   else:
     printHelp()
 
