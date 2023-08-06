@@ -70,8 +70,10 @@ proc prepAnswers(yd: YearDay) =
 
 proc compileProgram(yd: YearDay, opt: string) =
   echo fmt"Compiling d{yd.day:02}..."
-  var compile = if 'R' in opt: "-d:release" else: ""
-  let outputs = execProcess(fmt"nim c {compile} d{yd.day:02}.nim", getPath(fmt"{yd.year}"))
+  var options = ""
+  if 'R' in opt: options &= " -d:release"
+  if 'T' in opt: options &= " -d:timing"
+  let outputs = execProcess(fmt"nim c{options} d{yd.day:02}.nim", getPath(fmt"{yd.year}"))
   if not contains(outputs, "[SuccessX]"):
     echo outputs
 
@@ -102,7 +104,7 @@ proc printHelp() =
   echo """
 Usage: aoc [pitcerxR] [day] [year]
   Command: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check)
-  Options: R(elease)
+  Options: R(elease) T(iming)
   Warning: "e" command doesn't work in years 2019-2021"""
 
 
