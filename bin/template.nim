@@ -1,6 +1,7 @@
 # Advent of Code {year} - Day {day}
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[string]
 
@@ -11,5 +12,5 @@ proc parseData: Data =
 
 let data = parseData()
 
-echo 0
-echo 0
+benchmark:
+  echo 0
