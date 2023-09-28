@@ -61,13 +61,6 @@ proc copyTemplate(yd: YearDay) =
     writeFile(target, code)
 
 
-proc prepAnswers(yd: YearDay) =
-  createDir(getPath(fmt"{yd.year}/answers"))
-  let answers = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
-  if not fileExists(answers):
-    writeFile(answers, "0\n0\n")
-
-
 proc compileProgram(yd: YearDay, opt: string) =
   echo fmt"Compiling d{yd.day:02}..."
   var options = ""
@@ -88,6 +81,13 @@ proc runProgram(yd: YearDay, clipboard = false): string =
     execProcess(fmt"cmd /c d{yd.day:02}.exe < inputs/{yd.day:02}.txt")
 
 
+proc prepAnswers(yd: YearDay) =
+  createDir(getPath(fmt"{yd.year}/answers"))
+  let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
+  if not fileExists(target):
+    writeFile(target, "0\n0\n")
+
+
 proc testAnswers(yd: YearDay) =
   let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(target):
@@ -100,10 +100,21 @@ proc testAnswers(yd: YearDay) =
   echo (if answers == current: "OK" else: "Mismatch!\n[answers]\n" & answers & "\n[current]\n" & current)
 
 
+proc writeAnswers(yd: YearDay) =
+  let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
+  if not fileExists(target):
+    echo "No answers file"; return
+  if not fileExists(getPath(fmt"{yd.year}/d{yd.day:02}.exe")):
+    echo "No program file"; return
+
+  let current = runProgram(yd).strip & "\n"
+  writeFile(target, current)
+
+
 proc printHelp() =
   echo """
 Usage: aoc [pitcerxR] [day] [year]
-  Command: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check)
+  Command: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check) | w(rite)
   Options: R(elease) T(iming)
   Warning: "e" command doesn't work in years 2019-2021"""
 
@@ -119,6 +130,7 @@ proc runSteps(steps: string, yd: YearDay, opts: string) =
       of 'e': echo runProgram(yd, true)
       of 'r': echo runProgram(yd)
       of 'x': testAnswers(yd)
+      of 'w': writeAnswers(yd)
       else: discard
 
 
