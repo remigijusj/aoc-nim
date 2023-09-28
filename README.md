@@ -18,12 +18,14 @@ Helper script to download puzzles/input data and run/test solutions:
 bin/aoc command [day] [year]
 ```
 Available commands (for the given day/year):
-- p, puzzle - downloads the puzzle
-- i, input - downloads the input data file
-- t, template - copies the template as placeholder
-- a, all - runs all 3 above commands
-- r, run - compile and run the script
-- x, check - compile and run the scipt, check is answers match saved data
+- p, puzzle - download the puzzle description
+- i, input - download the input data file
+- t, template - copy the template as placeholder
+- c, compile - compile the script
+- e, example -  run the script with example input (from clipboard)
+- r, run - run the script
+- x, check - run the script, check is answers match saved data
+- w, write - write answers to the file
 
 Day and year are optional, default to current.
 Download commands need the session.txt file to be present.
