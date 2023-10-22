@@ -2,6 +2,7 @@
 
 import std/[strutils, sequtils, tables], intcode
 from math import euclMod
+import ../utils/common
 
 type
   Data = seq[int]
@@ -42,8 +43,8 @@ proc paintPanels(data: Data, start: int): Grid =
 
 proc display(grid: Grid): string =
   let points = grid.keys.toSeq
-  let minx = points.mapIt(it.x).min
-  let maxx = points.mapIt(it.x).max
+  let minx = points.mapIt(it.x).min + 1
+  let maxx = points.mapIt(it.x).max - 2
   let miny = points.mapIt(it.y).min
   let maxy = points.mapIt(it.y).max
   for y in miny..maxy:
@@ -58,4 +59,4 @@ proc partTwo(data: Data): string = data.paintPanels(1).display
 
 let data = parseData("inputs/11.txt")
 echo partOne(data)
-echo partTwo(data)
+echo partTwo(data).decodeBF6

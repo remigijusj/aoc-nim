@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 10
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[int]
 
@@ -50,7 +51,7 @@ func renderCRT(data: Data): string =
 let data = parseData()
 
 let part1 = data.totalStrength
-let part2 = data.renderCRT
+let part2 = data.renderCRT.decodeBF6
 
 echo part1
 echo part2
