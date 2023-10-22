@@ -42,6 +42,23 @@ proc parsePuzzle(page: string): string =
   removeFile(path)
 
 
+# avoiding regex :(
+proc findAnswer(page: string, start: int): (int, int) =
+  let p1 = page.find("<p>Your puzzle answer was <code>", start)
+  if p1 < 0: return
+  let p2 = page.find("</code>", p1 + 32)
+  if p2 < 0: return
+  result = (p1 + 32, p2)
+
+
+proc parseAnswers(page: string): string =
+  let (s1, e1) = page.findAnswer(0)
+  let a1 = if e1 > 0: page.substr(s1, e1-1) else: ""
+  let (s2, e2) = page.findAnswer(e1)
+  let a2 = if e2 > 0: page.substr(s2, e2-1) else: ""
+  result = [a1, a2].join("\n")
+
+
 proc saveFile(data: string, yd: YearDay, folder: string) =
   if data.len > 0:
     createDir(getPath(fmt"{yd.year}/{folder}"))
@@ -88,16 +105,15 @@ proc prepAnswers(yd: YearDay) =
     writeFile(target, "0\n0\n")
 
 
-proc testAnswers(yd: YearDay) =
+# Test given answers against saved file.
+proc testAnswers(given: string, yd: YearDay): string =
   let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(target):
-    echo "No answers file"; return
-  if not fileExists(getPath(fmt"{yd.year}/d{yd.day:02}.exe")):
-    echo "No program file"; return
+    return "No answers file"
 
-  let answers = readFile(target).strip
-  let current = runProgram(yd).strip
-  echo (if answers == current: "OK" else: "Mismatch!\n[answers]\n" & answers & "\n[current]\n" & current)
+  let saved = readFile(target).strip
+  let given = given.strip
+  return (if given == saved: "OK" else: "-- SAVED --\n" & saved & "\n-- GIVEN --\n" & given)
 
 
 proc writeAnswers(yd: YearDay) =
@@ -111,26 +127,38 @@ proc writeAnswers(yd: YearDay) =
   writeFile(target, current)
 
 
+proc openBrowser(yd: YearDay) =
+  let uri = fmt"https://adventofcode.com/{yd.year}/day/{yd.day}"
+  discard execProcess("cmd /c start " & uri)
+
+
 proc printHelp() =
   echo """
-Usage: aoc [pitcerxR] [day] [year]
-  Command: p(uzzle) | i(nput) | t(emplate) | c(ompile) | e(xample) | r(un) | x(check) | w(rite)
-  Options: R(elease) T(iming)
-  Warning: "e" command doesn't work in years 2019-2021"""
+Usage: aoc [pitbcrxwaRT] [day] [year]
+    pit - Puzzle,Input,Template download
+    b   - open puzzle page in Browser
+    cr  - Compile,Run program
+    e   - Example run with data from clipboard (not in years 2019/21)
+    x   - run program, compare with answers file
+    w   - run program, Write to answers file
+    a   - download Answers from website, compare with answers file
+  Options: R(elease) T(iming) """
 
 
 # Steps are lowercase, Opts are uppercase
 proc runSteps(steps: string, yd: YearDay, opts: string) =
   for step in steps:
     case step:
+      of 'b': openBrowser(yd)
       of 'p': fetchAocPage(yd).parsePuzzle.saveFile(yd, "puzzles")
       of 'i': fetchAocPage(yd, "/input").saveFile(yd, "inputs")
       of 't': copyTemplate(yd); prepAnswers(yd)
       of 'c': compileProgram(yd, opts)
       of 'e': echo runProgram(yd, true)
       of 'r': echo runProgram(yd)
-      of 'x': testAnswers(yd)
+      of 'x': echo runProgram(yd).testAnswers(yd)
       of 'w': writeAnswers(yd)
+      of 'a': echo fetchAocPage(yd).parseAnswers.testAnswers(yd)
       else: discard
 
 
