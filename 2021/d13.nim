@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 13
 
 import std/[sequtils, strutils, strscans]
+import ../utils/common
 
 type
   Point = array[2, int]
@@ -44,7 +45,7 @@ proc applyFolds(data: Data, folds: seq[Fold] = data.folds): seq[Point] =
 
 
 proc `$`(points: seq[Point]): string =
-  let lenx = points.mapIt(it[0]).max + 1
+  let lenx = points.mapIt(it[0]).max + 2
   let leny = points.mapIt(it[1]).max + 1
   var lines = newSeqWith(leny, newSeqWith(lenx, ' '))
   for p in points:
@@ -59,4 +60,4 @@ proc partTwo(data: Data): string = $data.applyFolds
 
 let data = parseData("inputs/13.txt")
 echo partOne(data)
-echo partTwo(data)
+echo partTwo(data).decodeBF6

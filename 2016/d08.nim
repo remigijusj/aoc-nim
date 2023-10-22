@@ -63,4 +63,4 @@ let output = data.runInstructions
 
 benchmark:
   echo output.count
-  echo $output
+  echo decodeBF6($output)

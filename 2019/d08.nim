@@ -1,6 +1,7 @@
 # Advent of Code 2019 - Day 8
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 const
   width = 25
@@ -40,4 +41,4 @@ proc partTwo(data: Data): string =
 
 let data = parseData("inputs/08.txt")
 echo partOne(data)
-echo partTwo(data)
+echo partTwo(data).decodeBF6
