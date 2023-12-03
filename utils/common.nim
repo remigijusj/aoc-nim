@@ -40,3 +40,8 @@ func decodeBF6*(code: string, shift = 0, width = 0): string =
           match = false
       if match:
         result &= BlockFont6List[n]
+
+
+# often needed
+func sum*[T](x: openArray[T]): T =
+  for i in items(x): result = result + i
