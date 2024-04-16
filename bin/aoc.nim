@@ -59,10 +59,10 @@ proc parseAnswers(page: string): string =
   result = [a1, a2].join("\n")
 
 
-proc saveFile(data: string, yd: YearDay, folder: string) =
+proc saveDataFile(data: string, yd: YearDay, folder: string) =
   if data.len > 0:
-    createDir(getPath(fmt"{yd.year}/{folder}"))
-    writeFile(getPath(fmt"{yd.year}/{folder}/{yd.day:02}.txt"), data)
+    createDir(getPath(fmt"data/{yd.year}/{folder}"))
+    writeFile(getPath(fmt"data/{yd.year}/{folder}/{yd.day:02}.txt"), data)
   else:
     echo "No content, won't save: " & $(yd) & " " & folder
 
@@ -95,19 +95,19 @@ proc runProgram(yd: YearDay, clipboard = false): string =
   elif clipboard:
     execProcess(fmt"cmd /c pbpaste | d{yd.day:02}.exe")
   else:
-    execProcess(fmt"cmd /c d{yd.day:02}.exe < inputs/{yd.day:02}.txt")
+    execProcess(fmt"cmd /c d{yd.day:02}.exe < ../data/{yd.year}/inputs/{yd.day:02}.txt")
 
 
 proc prepAnswers(yd: YearDay) =
-  createDir(getPath(fmt"{yd.year}/answers"))
-  let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
+  createDir(getPath(fmt"data/{yd.year}/answers"))
+  let target = getPath(fmt"data/{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(target):
     writeFile(target, "0\n0\n")
 
 
 # Test given answers against saved file.
 proc testAnswers(given: string, yd: YearDay): string =
-  let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
+  let target = getPath(fmt"data/{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(target):
     return "No answers file"
 
@@ -117,7 +117,7 @@ proc testAnswers(given: string, yd: YearDay): string =
 
 
 proc writeAnswers(yd: YearDay) =
-  let target = getPath(fmt"{yd.year}/answers/{yd.day:02}.txt")
+  let target = getPath(fmt"data/{yd.year}/answers/{yd.day:02}.txt")
   if not fileExists(target):
     echo "No answers file"; return
   if not fileExists(getPath(fmt"{yd.year}/d{yd.day:02}.exe")):
@@ -150,8 +150,8 @@ proc runSteps(steps: string, yd: YearDay, opts: string) =
   for step in steps:
     case step:
       of 'b': openBrowser(yd)
-      of 'p': fetchAocPage(yd).parsePuzzle.saveFile(yd, "puzzles")
-      of 'i': fetchAocPage(yd, "/input").saveFile(yd, "inputs")
+      of 'p': fetchAocPage(yd).parsePuzzle.saveDataFile(yd, "puzzles")
+      of 'i': fetchAocPage(yd, "/input").saveDataFile(yd, "inputs")
       of 't': copyTemplate(yd); prepAnswers(yd)
       of 'c': compileProgram(yd, opts)
       of 'e': echo runProgram(yd, true)
