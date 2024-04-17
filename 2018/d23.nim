@@ -2,6 +2,7 @@
 
 import std/[sequtils,strutils,strscans,heapqueue]
 from math import nextPowerOfTwo
+import ../utils/common
 
 type
   Pos = array[3, int]
@@ -20,7 +21,7 @@ func parseBot(line: string): Bot =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseBot)
+  readInput().strip.splitLines.map(parseBot)
 
 
 func dist(a, b: Pos): int =
@@ -85,5 +86,6 @@ proc condensationPoint(data: Data): int =
 
 let data = parseData()
 
-echo data.strongestReach
-echo data.condensationPoint
+benchmark:
+  echo data.strongestReach
+  echo data.condensationPoint

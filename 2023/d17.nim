@@ -24,7 +24,7 @@ func parseRow(line: string): seq[int] =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseRow)
+  readInput().strip.splitLines.map(parseRow)
 
 
 func opposite(a, b: Dir): bool {.inline.} = (a.ord - b.ord).abs == 2

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 21
 
 import std/[strscans,strutils,tables,sets,algorithm,rationals]
+import ../utils/common
 
 type
   Monkey = object
@@ -26,7 +27,7 @@ func parseMonkey(line: string): Monkey =
 
 
 proc parseData: Data =
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     let m = line.parseMonkey
     result[m.name] = m
 
@@ -81,8 +82,6 @@ func solveEquality(values: Table[string, Equation], name1, name2: string): int =
 let data = parseData()
 let list = data.topoSort("root")
 
-let part1 = data.evalSymbolic(list)["root"].b.toInt
-let part2 = data.evalSymbolic(list, "humn").solveEquality(data["root"].arg1, data["root"].arg2)
-
-echo part1
-echo part2
+benchmark:
+  echo data.evalSymbolic(list)["root"].b.toInt
+  echo data.evalSymbolic(list, "humn").solveEquality(data["root"].arg1, data["root"].arg2)

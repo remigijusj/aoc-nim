@@ -11,8 +11,8 @@ const
 type Data = seq[seq[int]]
 
 
-proc parseData(filename: string): Data =
-  let data = readFile(filename).strip.mapIt(it.ord - '0'.ord)
+proc parseData: Data =
+  let data = readInput().strip.mapIt(it.ord - '0'.ord)
   let num = data.len div layer
   result = data.distribute(num)
 
@@ -39,6 +39,8 @@ proc partTwo(data: Data): string =
     result &= (line & "\n")
 
 
-let data = parseData("inputs/08.txt")
-echo partOne(data)
-echo partTwo(data).decodeBF6
+let data = parseData()
+
+benchmark:
+  echo data.partOne
+  echo data.partTwo.decodeBF6

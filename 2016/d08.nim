@@ -28,12 +28,12 @@ func parseInstruction(line: string): Instruction =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 func `$`(s: Screen): string = s.join("\n")
 
-func count(s: Screen): int = s.mapIt(it.count('#')).foldl(a + b)
+func count(s: Screen): int = s.mapIt(it.count('#')).sum
 
 
 func runInstructions(data: Data, dim = (50, 6)): Screen =

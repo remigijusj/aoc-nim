@@ -5,7 +5,7 @@ import ../utils/common
 
 
 proc parseData: int =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 proc sumOfDivisors(house, limit: int): int =

@@ -30,7 +30,7 @@ func parseAunt(line: string): Aunt =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseAunt)
+  readInput().strip.splitLines.map(parseAunt)
 
 
 proc findNum(data: Data, match: proc(key: string, val: int): bool): int =

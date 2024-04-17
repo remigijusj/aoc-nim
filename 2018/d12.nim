@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 12
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type
   Rules = Table[string, char]
@@ -15,7 +16,7 @@ type
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n")
+  let parts = readInput().strip.split("\n\n")
   assert parts[0].scanf("initial state: $+", result.state)
   for line in parts[1].splitLines:
     result.rules[line[0..4]] = line[9]
@@ -60,5 +61,6 @@ func calculateSpread(data: Data, gens: int64): int64 =
 
 let data = parseData()
 
-echo data.simulateSpread(20).sumNumbers
-echo data.calculateSpread(50000000000)
+benchmark:
+  echo data.simulateSpread(20).sumNumbers
+  echo data.calculateSpread(50000000000)

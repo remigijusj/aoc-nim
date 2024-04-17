@@ -20,7 +20,7 @@ const delta = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func contains(data: Data, pos: XY): bool =

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 5
 
 import std/[strutils,strscans,algorithm]
+import ../utils/common
 
 type
   Move = tuple[num, src, dst: int]
@@ -14,7 +15,7 @@ type
 
 proc parseData: Data =
   var a, b, c: int
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     if line.len > 0 and line[0] == '[':
       for i in 1..9:
         let c = line[i*4-3]
@@ -41,8 +42,6 @@ proc top(stacks: Stacks): string =
 
 let data = parseData()
 
-let part1 = data.moveCrates.top
-let part2 = data.moveCrates(true).top
-
-echo part1
-echo part2
+benchmark:
+  echo data.moveCrates.top
+  echo data.moveCrates(true).top

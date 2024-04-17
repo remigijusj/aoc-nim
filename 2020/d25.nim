@@ -1,17 +1,19 @@
 # Advent of code 2020 - Day 25
 
-import strutils
+import std/[strutils]
+import ../utils/common
 
 const MODULUS = 20_201_227
 
 type Data = tuple[a, b: int]
 
-proc readData(filename: string): Data =
-  let lines = readFile(filename).splitLines
+
+proc parseData: Data =
+  let lines = readInput().strip.splitLines
   result = (lines[0].parseInt, lines[1].parseInt)
 
 
-proc partOne(data: Data): int =
+proc encryptionKey(data: Data): int =
   var a = 1
   var b = 1
   while true:
@@ -20,5 +22,7 @@ proc partOne(data: Data): int =
     if a == data.a: return b
 
 
-let data = readData("inputs/25.txt")
-echo partOne(data)
+let data = parseData()
+
+benchmark:
+  echo data.encryptionKey

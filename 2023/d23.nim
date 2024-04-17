@@ -22,7 +22,7 @@ const
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func `+`(a, b: XY): XY = (a.x + b.x, a.y + b.y)

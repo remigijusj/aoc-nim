@@ -1,11 +1,13 @@
 # Advent of code 2020 - Day 7
 
-import strutils, sequtils, tables, nre
-from math import sum
+import std/[strutils, sequtils, tables, nre]
+import ../utils/common
 
-type Bag = tuple[count: int, color: string]
+type
+  Bag = tuple[count: int, color: string]
 
-type Rules = TableRef[string, seq[Bag]]
+  Rules = TableRef[string, seq[Bag]]
+
 
 proc parseRule(rules: Rules, line: string) =
   let color = line.match(re"^(\w+ \w+) bags contain ").get.captures[0]
@@ -16,9 +18,9 @@ proc parseRule(rules: Rules, line: string) =
   rules[color] = bags
 
 
-proc fetchRules(filename: string): Rules =
+proc parseData: Rules =
   result = newTable[string, seq[Bag]]()
-  for line in lines(filename):
+  for line in readInput().strip.splitLines:
     result.parseRule(line)
 
 
@@ -34,10 +36,8 @@ proc countInside(rules: Rules, color: string): int =
   rules[color].mapIt(it.count * (rules.countInside(it.color) + 1)).sum
 
 
-proc partOne(rules: Rules): int = rules.countContaining("shiny gold")
-proc partTwo(rules: Rules): int = rules.countInside("shiny gold")
+let rules = parseData()
 
-
-let rules = fetchRules("inputs/07.txt")
-echo partOne(rules)
-echo partTwo(rules)
+benchmark:
+  echo rules.countContaining("shiny gold")
+  echo rules.countInside("shiny gold")

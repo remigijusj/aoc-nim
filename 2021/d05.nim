@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 5
 
-import std/[strscans, sequtils, tables]
+import std/[strscans, strutils, sequtils, tables]
+import ../utils/common
 
 type
   Point = tuple[x, y: int]
@@ -13,8 +14,8 @@ proc parseLine(line: string): Line =
   discard line.scanf("$i,$i -> $i,$i", result.a.x, result.a.y, result.b.x, result.b.y)
 
 
-proc parseData(filename: string): Data =
-  lines(filename).toSeq.mapIt(it.parseLine)
+proc parseData: Data =
+  readInput().strip.splitLines.mapIt(it.parseLine)
 
 
 iterator points(line: Line): Point =
@@ -38,9 +39,8 @@ proc countOverlaps(data: Data, axial: bool = false): int =
       if tally[point] == 2: result.inc
 
 
-proc partOne(data: Data): int = data.countOverlaps(axial = true)
-proc partTwo(data: Data): int = data.countOverlaps
+let data = parseData()
 
-let data = parseData("inputs/05.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.countOverlaps(axial = true)
+  echo data.countOverlaps

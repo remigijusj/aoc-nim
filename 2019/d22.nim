@@ -1,8 +1,9 @@
 # Advent of Code 2019 - Day 22
 
-import std/[strscans,sequtils,algorithm,options]
+import std/[strscans,strutils,sequtils,algorithm,options]
 import bigints
 from math import euclMod
+import ../utils/common
 
 type
   Kind = enum
@@ -17,9 +18,9 @@ type
   Map = (int, int)
 
 
-proc parseData(filename: string): Data =
+proc parseData: Data =
   var val: int
-  for line in lines(filename):
+  for line in readInput().strip.splitLines:
     if scanf(line, "cut $i", val):
       result.add (kCut, val)
     elif scanf(line, "deal with increment $i", val):
@@ -75,13 +76,17 @@ proc simulate(data: Data, num, exp: int, pos: int): int =
   result = toInt[int](x).get
 
 
-proc partOne(data: Data): int =
-  result = data.runShuffles(10007).find(2019)
-  assert result == data.map(toMap).compose(10007).apply(2019, 10007)
+proc positionOfCard(data: Data, num, deck: int): int =
+  result = data.runShuffles(deck).find(num)
+  assert result == data.map(toMap).compose(deck).apply(num, deck)
 
-proc partTwo(data: Data): int =
-  result = data.simulate(119315717514047.int, 101741582076661.int, 2020)
 
-let data = parseData("inputs/22.txt")
-echo partOne(data)
-echo partTwo(data)
+proc numberOnCard(data: Data, pos, deck, times: int): int =
+  result = data.simulate(deck, times, pos)
+
+
+let data = parseData()
+
+benchmark:
+  echo data.positionOfCard(2019, 10007)
+  echo data.numberOnCard(2020, 119315717514047.int, 101741582076661.int)

@@ -1,12 +1,13 @@
 # Advent of Code 2021 - Day 25
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type Data = seq[string]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split("\n")
+proc parseData: Data =
+  readInput().strip.split("\n")
 
 
 proc moveEast(grid: var Data): int =
@@ -54,8 +55,7 @@ proc simulate(data: Data): int =
     if count == 0: return step
 
 
-proc partOne(data: Data): int = data.simulate
+let data = parseData()
 
-
-let data = parseData("inputs/25.txt")
-echo partOne(data)
+benchmark:
+  echo data.simulate

@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 10
 
-import std/[sequtils, tables, algorithm]
+import std/[sequtils, strutils, tables, algorithm]
+import ../utils/common
 
 const
   Trans = {'(': ')', '[': ']', '{': '}', '<': '>'}.toTable
@@ -10,8 +11,8 @@ const
 type Data = seq[string]
 
 
-proc parseData(filename: string): Data =
-  lines(filename).toSeq
+proc parseData: Data =
+  readInput().strip.splitLines
 
 
 proc parse(line: string): tuple[stack: seq[char], score: int] =
@@ -33,10 +34,8 @@ proc median(list: seq[int]): int =
   result = list[list.len div 2]
 
 
-proc partOne(data: Data): int = data.mapIt(it.parse.score).foldl(a + b)
-proc partTwo(data: Data): int = data.mapIt(it.parse).filterIt(it.score == 0).mapIt(it.stack.completion).median
+let data = parseData()
 
-
-let data = parseData("inputs/10.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.mapIt(it.parse.score).sum
+  echo data.mapIt(it.parse).filterIt(it.score == 0).mapIt(it.stack.completion).median

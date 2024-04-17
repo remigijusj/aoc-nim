@@ -46,7 +46,7 @@ func parseModule(line: string): Module =
 
 
 proc parseData: Data =
-  let modules = readAll(stdin).strip.splitLines.map(parseModule)
+  let modules = readInput().strip.splitLines.map(parseModule)
   for module in modules:
     result[module.name] = module
 
@@ -116,5 +116,5 @@ func minimumPushes(data: Data): Table[string, int] =
 let data = parseData()
 
 benchmark:
-  echo data.handlePulses(1000).foldl(a * b)
+  echo data.handlePulses(1000).prod
   echo data.minimumPushes.values.toSeq.lcm

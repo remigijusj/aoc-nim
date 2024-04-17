@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 9
 
 import std/[strutils,strscans,sequtils,math,sets]
+import ../utils/common
 
 type
   Pair = (char, int)
@@ -13,7 +14,7 @@ func parseLine(line: string): Pair =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseLine)
+  readInput().strip.splitLines.map(parseLine)
 
 
 proc move(head: var Pos, dir: char) =
@@ -45,8 +46,6 @@ func simulate(data: Data, len: int): HashSet[Pos] =
 
 let data = parseData()
 
-let part1 = data.simulate(2).card
-let part2 = data.simulate(10).card
-
-echo part1
-echo part2
+benchmark:
+  echo data.simulate(2).card
+  echo data.simulate(10).card

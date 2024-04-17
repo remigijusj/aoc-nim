@@ -1,13 +1,14 @@
 # Advent of Code 2019 - Day 2
 
-import std/[strutils, sequtils], intcode
-
+import std/[strutils, sequtils]
+import intcode
+import ../utils/common
 
 type Data = seq[int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(',').mapIt(it.parseInt)
+proc parseData: Data =
+  readInput().strip.split(',').mapIt(it.parseInt)
 
 
 proc initIntcode(data: Data, noun, verb: int): Intcode =
@@ -31,6 +32,8 @@ proc partTwo(data: Data): int =
         return noun * 100 + verb
 
 
-let data = parseData("inputs/02.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.partOne
+  echo data.partTwo

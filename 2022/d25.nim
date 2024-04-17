@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 25
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 const digits = "=-012"
 
@@ -12,7 +13,7 @@ func parseSnafu(line: string): int =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseSnafu)
+  readInput().strip.splitLines.map(parseSnafu)
 
 
 func toSnafu(n: int): string =
@@ -29,4 +30,5 @@ func toSnafu(n: int): string =
 
 let data = parseData()
 
-echo data.foldl(a + b).toSnafu
+benchmark:
+  echo data.sum.toSnafu

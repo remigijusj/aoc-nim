@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func frequencies(data: Data): seq[Freq] =

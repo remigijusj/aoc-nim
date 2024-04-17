@@ -21,7 +21,7 @@ func parseBrick(line: string): Brick =
 
 
 proc parseData: Data =
-  result = readAll(stdin).strip.splitLines.map(parseBrick)
+  result = readInput().strip.splitLines.map(parseBrick)
   result.sort do (x, y: Brick) -> int:
     result  = cmp(x.a.z, y.a.z)
 

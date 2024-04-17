@@ -14,7 +14,7 @@ func parseTriple(line: string): Triple =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseTriple)
+  readInput().strip.splitLines.map(parseTriple)
 
 
 func transposed(data: Data): Data=

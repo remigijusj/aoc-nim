@@ -17,7 +17,7 @@ func parseReindeer(line: string): Reindeer =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseReindeer)
+  readInput().strip.splitLines.map(parseReindeer)
 
 
 func distance(r: Reindeer, time: int): int =

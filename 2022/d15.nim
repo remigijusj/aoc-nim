@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 15
 
 import std/[strutils,strscans,sequtils,algorithm]
+import ../utils/common
 
 const
   row = 2_000_000
@@ -24,7 +25,7 @@ func parseReading(line: string): Reading =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseReading)
+  readInput().strip.splitLines.map(parseReading)
 
 
 proc findIntervals(data: Data, row: int): seq[Interval] =
@@ -81,8 +82,6 @@ func tuningFrequency(point: XY, lim: int): int = point.x * lim + point.y
 
 let data = parseData()
 
-let part1 = data.findIntervals(row).coveredLength - data.countBeacons(row)
-let part2 = data.findUncoveredPoint(max).tuningFrequency(max)
-
-echo part1
-echo part2
+benchmark:
+  echo data.findIntervals(row).coveredLength - data.countBeacons(row)
+  echo data.findUncoveredPoint(max).tuningFrequency(max)

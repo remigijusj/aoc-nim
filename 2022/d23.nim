@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 23
 
 import std/[strutils,tables]
+import ../utils/common
 
 type
   XY = tuple[x, y: int]
@@ -8,7 +9,7 @@ type
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   for y, line in lines:
     for x, c in line:
       if c == '#': result[(x, y)] = 0
@@ -102,5 +103,6 @@ func countEmpty(grid: Data): int =
 
 let data = parseData()
 
-echo data.diffuse(10).grid.countEmpty
-echo data.diffuse(int.high).step
+benchmark:
+  echo data.diffuse(10).grid.countEmpty
+  echo data.diffuse(int.high).step

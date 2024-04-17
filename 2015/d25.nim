@@ -13,7 +13,7 @@ const
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.split(".  ")
+  let lines = readInput().strip.split(".  ")
   assert lines[^1].scanf("Enter the code at row $i, column $i.", result.row, result.col)
 
 

@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 14
 
 import std/[strutils, sequtils, tables]
+import ../utils/common
 
 type
   Data = object
@@ -13,8 +14,8 @@ proc parseRule(line: string): (string, string) =
   result = (parts[0], parts[1])
 
 
-proc parseData(filename: string): Data =
-  let parts = readFile(filename).strip.split("\n\n")
+proc parseData: Data =
+  let parts = readInput().strip.split("\n\n")
   result.poly = parts[0]
   result.rules = parts[1].split("\n").map(parseRule).toTable
 
@@ -50,10 +51,8 @@ proc width(table: CountTable[char]): int =
   result = counts[0] - counts[^1]
 
 
-proc partOne(data: Data): int = data.generate(10).width
-proc partTwo(data: Data): int = data.generate(40).width
+let data = parseData()
 
-
-let data = parseData("inputs/14.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.generate(10).width
+  echo data.generate(40).width

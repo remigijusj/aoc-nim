@@ -7,7 +7,7 @@ type Data = seq[int]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInt)
+  readInput().strip.splitLines.map(parseInt)
 
 
 func idealSplit(data: Data, target, size: int): int =
@@ -16,7 +16,7 @@ func idealSplit(data: Data, target, size: int): int =
 
   while true:
     if weight == target:
-      return indices.mapIt(data[it]).foldl(a * b) # QE
+      return indices.mapIt(data[it]).prod # QE
 
     var depth = size - 1
     while indices[depth] == data.len - size + depth:

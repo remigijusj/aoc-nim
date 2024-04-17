@@ -1,14 +1,14 @@
 # Advent of code 2020 - Day 10
 
-import sequtils
-from strutils import parseInt
-from algorithm import sort
+import std/[strutils, sequtils, algorithm]
+import ../utils/common
+
+type Data = seq[int]
+
 
 # also inserted 0 at head, max+3 at tail
-proc sortedIntList(filename: string): seq[int] =
-  for line in lines(filename):
-    result.add parseInt(line)
-
+proc parseData: Data =
+  result = readInput().strip.splitLines.map(parseInt)
   result.sort
   result.insert(0, 0)
   result.add(result[^1] + 3)
@@ -43,10 +43,8 @@ template withIt(val, op: untyped): untyped =
   op
 
 
-proc partOne(list: seq[int]): int = list.tallyDiffs.withIt(it[1] * it[3])
-proc partTwo(list: seq[int]): int = list.oneChains.mapIt(it.tribonacci).foldl(a * b)
+let data = parseData()
 
-
-let list = sortedIntList("inputs/10.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.tallyDiffs.withIt(it[1] * it[3])
+  echo data.oneChains.mapIt(it.tribonacci).prod

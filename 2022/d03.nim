@@ -1,12 +1,13 @@
 # Advent of Code 2022 - Day 3
 
-import std/[strutils,sequtils,math,setutils]
+import std/[strutils,sequtils,setutils]
+import ../utils/common
 
 type Data = seq[string]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func halves(item: string): seq[string] =
@@ -30,8 +31,6 @@ func priority(c: char): int =
 
 let data = parseData()
 
-let part1 = data.mapIt(it.halves.intersect.priority).sum
-let part2 = data.threes.mapIt(it.intersect.priority).sum
-
-echo part1
-echo part2
+benchmark:
+  echo data.mapIt(it.halves.intersect.priority).sum
+  echo data.threes.mapIt(it.intersect.priority).sum

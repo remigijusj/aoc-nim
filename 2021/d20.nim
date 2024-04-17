@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 20
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type
   Data = object
@@ -8,8 +9,8 @@ type
     grid: seq[string]
 
 
-proc parseData(filename: string): Data =
-  let parts = readFile(filename).strip.split("\n\n")
+proc parseData: Data =
+  let parts = readInput().strip.split("\n\n")
   result.rule = parts[0]
   result.grid = parts[1].split("\n")
 
@@ -52,12 +53,12 @@ proc simulate(data: Data, steps: int): seq[string] =
     result = result.apply(data.rule, filler)
 
 
-proc litPixels(grid: seq[string]): int = grid.mapIt(it.count('#')).foldl(a  + b)
-
-proc partOne(data: Data): int = data.simulate(2).litPixels
-proc partTwo(data: Data): int = data.simulate(50).litPixels
+proc litPixels(grid: seq[string]): int =
+  result = grid.mapIt(it.count('#')).sum
 
 
-let data = parseData("inputs/20.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.simulate(2).litPixels
+  echo data.simulate(50).litPixels

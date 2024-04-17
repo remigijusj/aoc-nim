@@ -1,13 +1,16 @@
 # Advent of code 2020 - Day 9
 
-import strutils, algorithm
+import std/[strutils, sequtils, algorithm]
+import ../utils/common
 
-proc integerList(filename: string): seq[int] =
-  for line in lines(filename):
-    result.add parseInt(line)
+type Data = seq[int]
 
 
-proc pairAddsTo(list: seq[int], target: int): bool =
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseInt)
+
+
+proc pairAddsTo(list: Data, target: int): bool =
   for i, x in list:
     if x >= target: continue
     for y in list[i+1 .. ^1]:
@@ -15,7 +18,7 @@ proc pairAddsTo(list: seq[int], target: int): bool =
         return true
 
 
-proc findInvalid(list: seq[int], window: int): int =
+proc findInvalid(list: Data, window: int): int =
   for i, x in list:
     if i < window: continue
     if not pairAddsTo(list[i-window .. i-1], x):
@@ -23,7 +26,7 @@ proc findInvalid(list: seq[int], window: int): int =
 
 
 # returns index of the last element
-proc rangeAddsTo(list: seq[int], target: int): int =
+proc rangeAddsTo(list: Data, target: int): int =
   var sum = 0
   for i, x in list:
     sum += x
@@ -33,23 +36,22 @@ proc rangeAddsTo(list: seq[int], target: int): int =
       return -1
 
 
-proc findContRange(list: seq[int], target: int): seq[int] =
+proc findContRange(list: Data, target: int): Data =
   for i, x in list:
     let j = list[i..^1].rangeAddsTo(target)
     if j >= 0:
       return list[i..i+j]
 
 
-proc minMaxSum(list: seq[int]): int =
+proc minMaxSum(list: Data): int =
   var list = list
   list.sort
   result = list[0] + list[^1]
 
 
-proc partOne(list: seq[int]): int = list.findInvalid(25)
-proc partTwo(list: seq[int]): int = list.findContRange(list.partOne).minMaxSum
+let data = parseData()
 
-
-let list = integerList("inputs/09.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  let invalid = data.findInvalid(25)
+  echo invalid
+  echo data.findContRange(invalid).minMaxSum

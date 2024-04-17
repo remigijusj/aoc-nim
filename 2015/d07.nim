@@ -41,7 +41,7 @@ func parseWire(line: string): Wire =
 
 
 proc parseData: Data =
-  let wires = readAll(stdin).strip.splitLines.map(parseWire)
+  let wires = readInput().strip.splitLines.map(parseWire)
   for wire in wires:
     result[wire.to] = wire
 

@@ -21,7 +21,7 @@ func parseCard(line: string): Card =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseCard)
+  readInput().strip.splitLines.map(parseCard)
 
 
 func score(card: Card): int =

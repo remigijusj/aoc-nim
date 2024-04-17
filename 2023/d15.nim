@@ -16,7 +16,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split(",")
+  readInput().strip.split(",")
 
 
 func hash(line: string): int =

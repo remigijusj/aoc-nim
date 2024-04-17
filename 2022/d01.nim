@@ -1,12 +1,13 @@
 # Advent of Code 2022 - Day 1
 
-import std/[strutils,sequtils,algorithm,math]
+import std/[strutils,sequtils,algorithm]
+import ../utils/common
 
 type Data = seq[int]
 
 
 proc parseData: Data =
-  let chunks = readAll(stdin).strip.split("\n\n")
+  let chunks = readInput().strip.split("\n\n")
   for chunk in chunks:
     result.add chunk.split("\n").map(parseInt).sum
 
@@ -14,8 +15,6 @@ proc parseData: Data =
 var data = parseData()
 data.sort(SortOrder.Descending)
 
-let part1 = data[0]
-let part2 = data[0..2].sum
-
-echo part1
-echo part2
+benchmark:
+  echo data[0]
+  echo data[0..2].sum

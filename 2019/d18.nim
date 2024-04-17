@@ -1,15 +1,18 @@
 import std/[deques,heapqueue,sets,strutils]
+import ../utils/common
 
 const S = 81
 
-type Data = string # SxS grid
+type
+  Data = string # SxS grid
 
-type Keys = set[range['a'..'z']]
+  Keys = set[range['a'..'z']]
 
-type Item = tuple
-  dist: int
-  loca: seq[int]
-  keys: Keys
+  Item = tuple
+    dist: int
+    loca: seq[int]
+    keys: Keys
+
 
 proc `<`(a, b: Item): bool = a.dist < b.dist
 
@@ -21,8 +24,8 @@ iterator neighbors(pos: int): int =
   yield pos - 1
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     result &= line
   assert result.len == S*S
 
@@ -72,12 +75,12 @@ proc findAllKeys(data: Data, start: seq[int]): int =
         queue.push (dist + d, nplaces, nkeys)
 
 
-proc partOne(data: Data): int =
+proc shortestPath(data: Data): int =
   let start = data.find('@')
   data.findAllKeys(@[start])
 
 
-proc partTwo(data: var Data): int =
+proc fewestSteps(data: var Data): int =
   let start = data.find('@')
   data[start-1-S .. start+1-S] = "@#@"
   data[start-1   .. start+1  ] = "###"
@@ -85,6 +88,8 @@ proc partTwo(data: var Data): int =
   data.findAllKeys(@[start-S-1, start-S+1, start+S-1, start+S+1])
 
 
-var data = parseData("inputs/18.txt")
-echo partOne(data)
-echo partTwo(data)
+var data = parseData()
+
+benchmark:
+  echo data.shortestPath
+  echo data.fewestSteps

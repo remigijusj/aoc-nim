@@ -1,19 +1,21 @@
 # Advent of Code 2019 - Day 3
 
 import std/[strutils, sequtils, sets, tables]
+import ../utils/common
 
-type Line = tuple[dir: char, move: int]
+type
+  Line = tuple[dir: char, move: int]
 
-type Wire = seq[Line]
+  Wire = seq[Line]
 
-type Data = seq[Wire]
+  Data = seq[Wire]
 
-type Point = tuple[x, y: int]
+  Point = tuple[x, y: int]
 
-type Trace = Table[Point, int]
+  Trace = Table[Point, int]
 
-# 2 traces and intersection set
-type Inter = tuple[t0, t1: Trace, inter: HashSet[Point]]
+  # 2 traces and intersection set
+  Inter = tuple[t0, t1: Trace, inter: HashSet[Point]]
 
 
 proc parseLine(str: string): Line =
@@ -21,8 +23,8 @@ proc parseLine(str: string): Line =
   result.move = str[1..^1].parseInt
 
 
-proc parseData(filename: string): Data =
-  for line in readFile(filename).strip.split("\n"):
+proc parseData: Data =
+  for line in readInput().strip.split("\n"):
     result.add line.split(",").mapIt(it.parseLine)
 
 
@@ -67,8 +69,10 @@ proc partTwo(inter: Inter): int =
     if comb < result: result = comb
 
 
-let data = parseData("inputs/03.txt")
-let inter = data.tracesIntersection
+let data = parseData()
 
-echo partOne(inter)
-echo partTwo(inter)
+benchmark:
+  let inter = data.tracesIntersection
+
+  echo inter.partOne
+  echo inter.partTwo

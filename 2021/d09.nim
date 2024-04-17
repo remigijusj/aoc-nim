@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 9
 
-import std/[sequtils, algorithm]
+import std/[sequtils, strutils, algorithm]
+import ../utils/common
 
 type
   Data = seq[seq[int]]
@@ -11,8 +12,8 @@ type
 proc `[]`(data: Data, point: Point): int = data[point.x][point.y]
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     result.add line.mapIt(it.ord - '0'.ord)
 
 
@@ -45,10 +46,8 @@ proc basin(start: Point, data: Data): seq[Point] =
     marker.inc
 
 
-proc partOne(data: Data): int = data.lowPoints.mapIt(data[it] + 1).foldl(a + b)
-proc partTwo(data: Data): int = data.lowPoints.mapIt(it.basin(data).len).sorted(Descending)[0..2].foldl(a * b)
+let data = parseData()
 
-
-let data = parseData("inputs/09.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.lowPoints.mapIt(data[it] + 1).sum
+  echo data.lowPoints.mapIt(it.basin(data).len).sorted(Descending)[0..2].prod

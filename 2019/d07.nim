@@ -1,14 +1,17 @@
 # Advent of Code 2019 - Day 7
 
-import std/[strutils, sequtils, algorithm, deques], intcode
+import std/[strutils, sequtils, algorithm, deques]
+import intcode
+import ../utils/common
 
-type Data = seq[int]
+type
+  Data = seq[int]
 
-type Phases = array[5, int]
+  Phases = array[5, int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(',').mapIt(it.parseInt)
+proc parseData: Data =
+  readInput().strip.split(',').mapIt(it.parseInt)
 
 
 proc simulateSimple(data: Data, phases: Phases): int =
@@ -52,10 +55,8 @@ proc maxSignal(data: Data, phases: Phases, simulate: proc(data: Data, phases: Ph
     if not cont: break
 
 
-proc partOne(data: Data): int = maxSignal(data, [0, 1, 2, 3, 4], simulateSimple)
-proc partTwo(data: Data): int = maxSignal(data, [5, 6, 7, 8, 9], simulateFeedback)
+let data = parseData()
 
-
-let data = parseData("inputs/07.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.maxSignal([0, 1, 2, 3, 4], simulateSimple)
+  echo data.maxSignal([5, 6, 7, 8, 9], simulateFeedback)

@@ -7,7 +7,7 @@ type Data = seq[string]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func neighbors(data: Data, x, y: int): int {.inline.} =

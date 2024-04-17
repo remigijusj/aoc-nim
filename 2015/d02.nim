@@ -14,7 +14,7 @@ func parseBox(line: string): Box =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseBox)
+  readInput().strip.splitLines.map(parseBox)
 
 
 func wrappingPaper(box: Box): int =

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 4
 
 import std/[strutils,strscans,sequtils]
+import ../utils/common
 
 type
   Pair = tuple[a, b, c, d: int]
@@ -14,7 +15,7 @@ proc parsePair(line: string): Pair =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parsePair)
+  readInput().strip.splitLines.map(parsePair)
 
 
 func contains(pair: Pair): bool = 
@@ -26,8 +27,6 @@ func overlaps(pair: Pair): bool =
 
 let data = parseData()
 
-let part1 = data.countIt(it.contains)
-let part2 = data.countIt(it.overlaps)
-
-echo part1
-echo part2
+benchmark:
+  echo data.countIt(it.contains)
+  echo data.countIt(it.overlaps)

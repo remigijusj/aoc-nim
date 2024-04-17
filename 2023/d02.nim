@@ -30,7 +30,7 @@ func parseGame(line: string): Game =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseGame)
+  readInput().strip.splitLines.map(parseGame)
 
 
 func `<`(a, b: Set): bool =
@@ -54,5 +54,5 @@ func power(bag: Set): int=
 let data = parseData()
 
 benchmark:
-  echo data.filterIt(it.possible([12, 13, 14])).mapIt(it.id).foldl(a + b) # 2541
-  echo data.mapIt(it.minimal.power).foldl(a + b)
+  echo data.filterIt(it.possible([12, 13, 14])).mapIt(it.id).sum
+  echo data.mapIt(it.minimal.power).sum

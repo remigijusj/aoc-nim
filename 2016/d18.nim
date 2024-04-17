@@ -6,7 +6,7 @@ import ../utils/common
 const traps = ["^^.", ".^^", "^..", "..^"]
 
 proc parseData: string =
-  readAll(stdin).strip
+  readInput().strip
 
 
 proc nextGen(row: var string) =

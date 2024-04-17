@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 10
 
 import std/[strscans,strutils,sequtils]
+import ../utils/common
 
 type
   XY = array[2, int]
@@ -19,7 +20,7 @@ func parsePoint(line: string): Point =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parsePoint)
+  readInput().strip.splitLines.map(parsePoint)
 
 
 proc step(points: var seq[XY], data: Data, count = 1) =
@@ -68,7 +69,9 @@ proc simulatePoints(data: Data): (string, int) =
 
 
 let data = parseData()
-let (message, seconds) = data.simulatePoints
 
-echo message
-echo seconds
+benchmark:
+  let (message, seconds) = data.simulatePoints
+
+  echo message
+  echo seconds

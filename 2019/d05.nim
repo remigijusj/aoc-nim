@@ -1,14 +1,17 @@
 # Advent of Code 2019 - Day 5
 
-import std/[strutils, sequtils], intcode
+import std/[strutils, sequtils]
+import intcode
+import ../utils/common
 
 type Data = seq[int]
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(',').mapIt(it.parseInt)
+
+proc parseData: Data =
+  readInput().strip.split(',').mapIt(it.parseInt)
 
 
-proc partOne(data: Data): int =
+proc diagnosticCode(data: Data): int =
   var ic = data.toIntcode
   let output = ic.run(1)
   for i in 0..output.len-2:
@@ -16,8 +19,8 @@ proc partOne(data: Data): int =
   return output[^1]
 
 
-proc partTwo(data: Data): int = runIntcode(data, 5)
+let data = parseData()
 
-let data = parseData("inputs/05.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.diagnosticCode
+  echo data.runIntcode(5)

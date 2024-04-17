@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 4
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type
   Card = seq[int]
@@ -16,8 +17,8 @@ proc parseCard(text: string): Card =
   result = text.splitWhitespace.mapIt(it.parseInt)
 
 
-proc parseData(filename: string): Data =
-  let parts = readFile(filename).strip.split("\n\n")
+proc parseData: Data =
+  let parts = readInput().strip.split("\n\n")
   result.numbers = parts[0].split(",").mapIt(it.parseInt)
   result.cards = parts[1..^1].mapIt(it.parseCard)
 
@@ -53,10 +54,8 @@ proc winningScore(data: Data, pick: proc(x: openArray[int]): int): int =
     if res.index == index: return res.score
 
 
-proc partOne(data: Data): int = data.winningScore(min)
-proc partTwo(data: Data): int = data.winningScore(max)
+let data = parseData()
 
-
-let data = parseData("inputs/04.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.winningScore(min)
+  echo data.winningScore(max)

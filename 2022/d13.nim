@@ -1,12 +1,13 @@
 # Advent of Code 2022 - Day 13
 
 import std/[strutils,json,algorithm]
+import ../utils/common
 
 type Data = seq[JsonNode]
 
 
 proc parseData: Data =
-  for line in readAll(stdin).splitLines:
+  for line in readInput().splitLines:
     if line != "":
       result.add line.parseJson
 
@@ -45,8 +46,6 @@ func decoderKey(data: Data): int =
 
 let data = parseData()
 
-let part1 = data.rightIndicesSum
-let part2 = data.decoderKey
-
-echo part1
-echo part2
+benchmark:
+  echo data.rightIndicesSum
+  echo data.decoderKey

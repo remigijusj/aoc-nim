@@ -51,7 +51,7 @@ func runProgram(data: Data, init: int): int =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 let data = parseData()

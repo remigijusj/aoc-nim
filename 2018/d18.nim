@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 18
 
 import std/[strutils,tables]
+import ../utils/common
 
 type
   Data = seq[string]
@@ -12,7 +13,7 @@ func resourceValue(data: Data): int =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func adjacent(data: Data, x, y: int): array[3, int] =
@@ -62,5 +63,6 @@ func runLumber(data: Data, total: int): Data =
 
 let data = parseData()
 
-echo data.runLumber(10).resourceValue
-echo data.runLumber(1_000_000_000).resourceValue
+benchmark:
+  echo data.runLumber(10).resourceValue
+  echo data.runLumber(1_000_000_000).resourceValue

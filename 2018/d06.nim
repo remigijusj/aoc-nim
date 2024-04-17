@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 6
 
-import std/[strscans,strutils,sequtils,sugar]
+import std/[strscans,strutils,sequtils]
+import ../utils/common
 
 type
   Point = tuple[x, y: int]
@@ -18,7 +19,7 @@ func parsePoint(line: string): Point =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parsePoint)
+  readInput().strip.splitLines.map(parsePoint)
 
 
 func boundaries(data: Data): Rect =
@@ -58,7 +59,7 @@ func largestFiniteArea(data: Data, rect: Rect): int =
 func totalDistanceArea(data: Data, rect: Rect, limit: int): int =
   for x in rect.minx-1 .. rect.maxx+1:
     for y in rect.miny-1 .. rect.maxy+1:
-      let sum = data.mapIt(dist(it, (x, y))).foldl(a + b)
+      let sum = data.mapIt(dist(it, (x, y))).sum
       if sum < limit:
         assert x >= rect.minx and x <= rect.maxx and y >= rect.miny and y <= rect.maxy
         result.inc
@@ -67,5 +68,6 @@ func totalDistanceArea(data: Data, rect: Rect, limit: int): int =
 let data = parseData()
 let rect = data.boundaries
 
-echo data.largestFiniteArea(rect)
-echo data.totalDistanceArea(rect, 10000)
+benchmark:
+  echo data.largestFiniteArea(rect)
+  echo data.totalDistanceArea(rect, 10000)

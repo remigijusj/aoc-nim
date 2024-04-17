@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 19
 
 import std/[strscans,strutils,sequtils]
+import ../utils/common
 
 type
   Blueprint = tuple
@@ -23,7 +24,7 @@ func parseBlueprint(line: string): Blueprint =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseBlueprint)
+  readInput().strip.splitLines.map(parseBlueprint)
 
 
 template buildRobot(delta, costs) =
@@ -81,8 +82,6 @@ func maxGeodes(blue: Blueprint, num: int): int =
 
 let data = parseData()
 
-let part1 = data.mapIt(it.maxGeodes(24) * it.id).foldl(a + b)
-let part2 = data[0..2].mapIt(it.maxGeodes(32)).foldl(a * b)
-
-echo part1
-echo part2
+benchmark:
+  echo data.mapIt(it.maxGeodes(24) * it.id).sum
+  echo data[0..2].mapIt(it.maxGeodes(32)).prod

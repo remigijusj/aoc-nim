@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 23
 
 import astar
+import ../utils/common
 
 const
   chars = "ABCD."
@@ -14,8 +15,8 @@ type
   State = string
 
 
-proc parseData(filename: string): State =
-  for c in readFile(filename):
+proc parseData: State =
+  for c in readInput():
     if chars.find(c) >= 0: result &= c
 
 
@@ -109,10 +110,8 @@ proc unfold(state: State): State =
   result.insert("DCBADBAC", 15)
 
 
-proc partOne(state: State): int = state.minCost("...........ABCDABCD")
-proc partTwo(state: State): int = state.unfold.minCost("...........ABCDABCDABCDABCD")
+let data = parseData()
 
-
-let data = parseData("inputs/23.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.minCost("...........ABCDABCD")
+  echo data.unfold.minCost("...........ABCDABCDABCDABCD")

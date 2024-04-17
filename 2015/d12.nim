@@ -5,7 +5,7 @@ import ../utils/common
 
 
 proc parseData: JsonNode =
-  readAll(stdin).strip.parseJson
+  readInput().strip.parseJson
 
 
 func sumNumbers(node: JsonNode, skipRed: bool): int =

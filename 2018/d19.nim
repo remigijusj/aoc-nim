@@ -2,6 +2,7 @@
 
 import std/[strscans,strutils,sequtils,tables]
 from math import sqrt
+import ../utils/common
 
 type
   Regs = array[6, int]
@@ -42,7 +43,7 @@ func parseInstr(line: string): Instr=
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   assert lines[0].scanf("#ip $i", result.ip)
   result.lines = lines[1..^1].map(parseInstr)
 
@@ -70,6 +71,7 @@ proc sumOfDivisors(n: int): int =
 
 let data = parseData()
 
-echo data.run([0, 0, 0, 0, 0, 0])[0]
-# echo data.run([1, 0, 0, 0, 0, 0])[0]
-echo sumOfDivisors(10551319)
+benchmark:
+  echo data.run([0, 0, 0, 0, 0, 0])[0]
+  # echo data.run([1, 0, 0, 0, 0, 0])[0]
+  echo sumOfDivisors(10551319)

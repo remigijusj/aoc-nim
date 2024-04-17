@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 7
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type
   Node = object
@@ -19,7 +20,7 @@ func parseNode(line: string): Node =
 
 
 proc parseData: Data =
-  for node in readAll(stdin).strip.splitLines.map(parseNode):
+  for node in readInput().strip.splitLines.map(parseNode):
     result[node.name] = node
 
 
@@ -63,7 +64,8 @@ func traverseTree(data: Data, root: string): tuple[weight, unbalanced: int] =
 
 
 let data = parseData()
-let root = data.rootName
 
-echo root
-echo data.traverseTree(root).unbalanced
+benchmark:
+  let root = data.rootName
+  echo root
+  echo data.traverseTree(root).unbalanced

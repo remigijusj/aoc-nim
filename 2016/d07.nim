@@ -7,7 +7,7 @@ type Data = seq[string]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func supportTLS(line: string): bool =

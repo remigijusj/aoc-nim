@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.mapIt(it.splitWhitespace.map(parseInt))
+  readInput().strip.splitLines.mapIt(it.splitWhitespace.map(parseInt))
 
 
 func predictNext(list: List): int =

@@ -1,24 +1,28 @@
 # Advent of code 2020 - Day 12
 
-from strutils import parseInt
+import std/[strutils, sequtils]
+import ../utils/common
 
 # x facing east, y facing north
 const DIR = [(x: 1, y: 0), (x: 0, y: 1), (x: -1, y: 0), (x: 0, y: -1)]
 
-type State = object
-  x, y: int
-  dir: int
-  wayX, wayY: int
+type
+  State = object
+    x, y: int
+    dir: int
+    wayX, wayY: int
 
-type Step = tuple[kind: char, value: int]
+  Step = tuple[kind: char, value: int]
+
+  Data = seq[Step]
+
 
 proc parseStep(line: string): Step =
   (line[0], parseInt(line[1..^1]))
 
 
-proc readList(filename: string): seq[Step] =
-  for line in lines(filename):
-    result.add parseStep(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseStep)
 
 
 proc run1(state: var State, step: Step) =
@@ -54,7 +58,7 @@ proc run2(state: var State, step: Step) =
   else: discard
 
 
-proc simulate(list: seq[Step], run: proc(state: var State, step: Step)): State =
+proc simulate(list: Data, run: proc(state: var State, step: Step)): State =
   result = State(wayX: 10, wayY: 1)
   for step in list:
     run(result, step)
@@ -62,10 +66,9 @@ proc simulate(list: seq[Step], run: proc(state: var State, step: Step)): State =
 
 proc manhattan(state: State): int = state.x.abs + state.y.abs
 
-proc partOne(list: seq[Step]): int = list.simulate(run1).manhattan
-proc partTwo(list: seq[Step]): int = list.simulate(run2).manhattan
 
+let data = parseData()
 
-let list = readList("inputs/12.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.simulate(run1).manhattan
+  echo data.simulate(run2).manhattan

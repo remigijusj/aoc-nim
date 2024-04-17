@@ -2,6 +2,7 @@
 
 import std/[strutils,sequtils]
 import intcode
+import ../utils/common
 
 type Data = seq[int]
 
@@ -27,8 +28,8 @@ AND D J
 RUN
 """
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc runIntcode(data: Data, program: string): int =
@@ -40,9 +41,8 @@ proc runIntcode(data: Data, program: string): int =
     echo output.mapIt(it.chr).join
 
 
-proc partOne(data: Data): int = data.runIntcode(part1)
-proc partTwo(data: Data): int = data.runIntcode(part2)
+let data = parseData()
 
-let data = parseData("inputs/21.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.runIntcode(part1)
+  echo data.runIntcode(part2)

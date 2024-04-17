@@ -1,11 +1,16 @@
 # Advent of code 2020 - Day 4
 
-import strutils, sequtils, re, tables
+import std/[strutils, sequtils, re, tables]
+import ../utils/common
 
-type Key = enum
-  byr, iyr, eyr, hgt, hcl, ecl, pid, cid
 
-type Passport = Table[Key, string]
+type
+  Key = enum
+    byr, iyr, eyr, hgt, hcl, ecl, pid, cid
+
+  Passport = Table[Key, string]
+
+  Data = seq[Passport]
 
 
 let rules = {
@@ -26,9 +31,8 @@ proc parsePassport(record: string): Passport =
     result[key] = piece[4..^1]
 
 
-proc passportList(filename: string): seq[Passport] =
-  for record in readFile(filename).split("\n\n"):
-    result.add parsePassport(record)
+proc parseData: Data =
+  readInput().strip.split("\n\n").map(parsePassport)
 
 
 proc validKeys(p: Passport): bool =
@@ -42,10 +46,8 @@ proc validValues(p: Passport): bool =
       return false
 
 
-proc partOne(list: seq[Passport]): int = list.countIt(it.validKeys)
-proc partTwo(list: seq[Passport]): int = list.countIt(it.validKeys and it.validValues)
+let data = parseData()
 
-
-let list = passportList("inputs/04.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.countIt(it.validKeys)
+  echo data.countIt(it.validKeys and it.validValues)

@@ -19,7 +19,7 @@ func parseItem(line: string): Item =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseItem)
+  readInput().strip.splitLines.map(parseItem)
 
 
 func unfold(item: Item, count: int): Item =

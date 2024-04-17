@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 6
 
 import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type
   Data = seq[int]
@@ -9,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitWhitespace.map(parseInt)
+  readInput().strip.splitWhitespace.map(parseInt)
 
 
 proc redistribute(data: var Data) =
@@ -34,7 +35,8 @@ func detectLoop(data: Data): (int, int) =
 
 
 let data = parseData()
-let loop = data.detectLoop
 
-echo loop[0]
-echo loop[1]
+benchmark:
+  let loop = data.detectLoop
+  echo loop[0]
+  echo loop[1]

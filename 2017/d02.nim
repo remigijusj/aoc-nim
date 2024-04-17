@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 2
 
-import std/[strutils,sequtils,math]
+import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[seq[int]]
 
@@ -10,7 +11,7 @@ func parseLine(line: string): seq[int] =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseLine)
+  readInput().strip.splitLines.map(parseLine)
 
 
 func evenDivide(row: seq[int]): int =
@@ -22,5 +23,6 @@ func evenDivide(row: seq[int]): int =
 
 let data = parseData()
 
-echo data.mapIt(it.max - it.min).sum
-echo data.map(evenDivide).sum
+benchmark:
+  echo data.mapIt(it.max - it.min).sum
+  echo data.map(evenDivide).sum

@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 3
 
 import std/[strscans,strutils,sequtils,tables,sugar]
+import ../utils/common
 
 type
   Cell = tuple[x, y: int]
@@ -20,7 +21,7 @@ func parseClaim(line: string): Claim =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseClaim)
+  readInput().strip.splitLines.map(parseClaim)
 
 
 iterator cells(claim: Claim): Cell =
@@ -54,5 +55,6 @@ func nonOverlappingClaim(data: Data, grid: Grid): int =
 let data = parseData()
 let grid = data.buildGrid
 
-echo grid.overlapArea
-echo data.nonOverlappingClaim(grid)
+benchmark:
+  echo grid.overlapArea
+  echo data.nonOverlappingClaim(grid)

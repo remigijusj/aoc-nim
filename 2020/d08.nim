@@ -1,22 +1,26 @@
 # Advent of code 2020 - Day 8
 
-import strutils, sequtils
+import std/[strutils, sequtils]
+import ../utils/common
 
-type Kind = enum
-  acc, jmp, nop
+type
+  Kind = enum
+    acc, jmp, nop
 
-type Instruction = object
-  kind: Kind
-  delta: int
+  Instruction = object
+    kind: Kind
+    delta: int
+
+  Data = seq[Instruction]
+
 
 proc parseInstruction(line: string): Instruction =
   result.kind = parseEnum[Kind](line[0..2])
   result.delta = parseInt(line[4..^1])
 
 
-proc instructionsList(filename: string): seq[Instruction] =
-  for line in lines(filename):
-    result.add parseInstruction(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 proc step(instruction: Instruction, idx, accum: var int) =
@@ -49,7 +53,7 @@ proc flip(instruction: var Instruction): bool =
   true
 
 
-proc computeFixed(list: seq[Instruction]): int =
+proc computeFixed(list: Data): int =
   var list = list
   for idx, instr in mpairs(list):
     if instr.flip:
@@ -59,10 +63,8 @@ proc computeFixed(list: seq[Instruction]): int =
         return acc
 
 
-proc partOne(list: seq[Instruction]): int = list.runCalc.accum
-proc partTwo(list: seq[Instruction]): int = list.computeFixed
+let data = parseData()
 
-
-let list = instructionsList("inputs/08.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.runCalc.accum
+  echo data.computeFixed

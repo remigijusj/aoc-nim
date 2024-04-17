@@ -8,7 +8,7 @@ type Data = string
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 proc findHash(data: Data, count: int): int =

@@ -1,5 +1,10 @@
 import std/[times,monotimes,strutils]
 
+
+proc readInput*(): string =
+  result = readAll(stdin)
+
+
 template benchmark*(code: untyped) =
   block:
     when defined(timing):
@@ -45,3 +50,7 @@ func decodeBF6*(code: string, shift = 0, width = 0): string =
 # often needed
 func sum*[T](x: openArray[T]): T =
   for i in items(x): result = result + i
+
+func prod*[T](x: openArray[T]): T =
+  result = 1
+  for i in items(x): result = result * i

@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 17
 
 import std/[strscans, sequtils]
+import ../utils/common
 
 type
   Vector = tuple[x, y: int]
@@ -10,8 +11,8 @@ type
     ymin, ymax: int
 
 
-proc parseData(filename: string): Data =
-  let data = readfile(filename)
+proc parseData: Data =
+  let data = readInput()
   discard data.scanf("target area: x=$i..$i, y=$i..$i", result.xmin, result.xmax, result.ymin, result.ymax)
 
 
@@ -35,9 +36,9 @@ iterator shots(data: Data): Vector =
 
 proc triangular(n: int): int = n * (n+1) div 2
 
-proc partOne(data: Data): int = triangular(data.ymin.abs - 1)
-proc partTwo(data: Data): int = data.shots.countIt(data.hit(it))
 
-let data = parseData("inputs/17.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo triangular(data.ymin.abs - 1)
+  echo data.shots.countIt(data.hit(it))

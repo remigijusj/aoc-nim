@@ -1,11 +1,13 @@
 # Advent of Code 2019 - Day 16
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[int]
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.mapIt(it.ord - '0'.ord)
+
+proc parseData(): Data =
+  readInput().strip.mapIt(it.ord - '0'.ord)
 
 
 proc applyFFT(data: var Data) =
@@ -21,7 +23,7 @@ proc applyFFT(data: var Data) =
     data[n] = (val mod 10).abs
 
 
-proc partOne(data: Data): string =
+proc firstEight(data: Data): string =
   var data = data
   for _ in 1..100:
     data.applyFFT
@@ -29,7 +31,7 @@ proc partOne(data: Data): string =
 
 
 # lower half of FFT is triangular ones matrix
-proc partTwo(data: Data): string =
+proc embeddedMsg(data: Data): string =
   let offset = data[0..<7].foldl(a * 10 + b)
   var data = data.cycle(10_000)[offset..^1]
   for _ in 1..100:
@@ -38,6 +40,8 @@ proc partTwo(data: Data): string =
   result = data[0..<8].mapIt($it).join
 
 
-let data = parseData("inputs/16.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.firstEight
+  echo data.embeddedMsg

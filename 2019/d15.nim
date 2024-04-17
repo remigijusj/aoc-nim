@@ -2,26 +2,29 @@
 
 import std/[strutils,sequtils,tables,deques]
 import intcode
+import ../utils/common
 
-type Move = enum
-  here  = 0
-  north = 1
-  south = 2
-  west  = 3
-  east  = 4
+type
+  Move = enum
+    here  = 0
+    north = 1
+    south = 2
+    west  = 3
+    east  = 4
 
-type Resp = enum
-  stay  = 0
-  move  = 1
-  halt  = 2
+  Resp = enum
+    stay  = 0
+    move  = 1
+    halt  = 2
 
-type Cell = tuple[x, y: int]
+  Cell = tuple[x, y: int]
 
-type Grid = Table[Cell, int]
+  Grid = Table[Cell, int]
 
-type Data = seq[int]
+  Data = seq[int]
 
 const moveback = [here, south, north, east, west]
+
 
 var ic: Intcode
 var grid: Grid
@@ -36,8 +39,8 @@ iterator neighbors(cell: Cell): (Cell, Move) =
   yield ((x+1, y), east)
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 # DFS, recursive, full
@@ -72,13 +75,13 @@ proc floodFill(start: Cell) =
         front.addLast(cell)
 
 
-proc partOne(data: Data): int =
+proc minMoves(data: Data): int =
   ic = data.toIntcode
   exploreMaze((0, 0), here)
   result = grid[oxy]
 
 
-proc partTwo(data: Data): int =
+proc fillOxygen(data: Data): int =
   for cell, val in grid:
     if val >= 0: grid[cell] = 0
   floodFill(oxy)
@@ -86,6 +89,8 @@ proc partTwo(data: Data): int =
     if val > result: result = val
 
 
-let data = parseData("inputs/15.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.minMoves
+  echo data.fillOxygen

@@ -1,12 +1,13 @@
 # Advent of Code 2017 - Day 10
 
 import std/[strutils,sequtils,algorithm]
+import ../utils/common
 
 type Data = string
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func runKnot(data: seq[int], num = 256, rounds = 1): seq[int] =
@@ -40,5 +41,6 @@ func knotHash*(data: Data): string =
 when isMainModule:
   let data = parseData()
 
-  echo data.knotOnce
-  echo data.knotHash
+  benchmark:
+    echo data.knotOnce
+    echo data.knotHash

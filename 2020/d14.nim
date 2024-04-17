@@ -1,6 +1,7 @@
 # Advent of code 2020 - Day 14
 
-import strutils, strscans, tables, bitops
+import std/[strutils, sequtils, strscans, tables, bitops]
+import ../utils/common
 
 type
   Memory = Table[int, int]
@@ -17,6 +18,8 @@ type
     of kMask: mask: Mask
     of kMemo: address, value: int
 
+  Data = seq[Instruction]
+
 
 proc parseMask(mask: string): Mask =
   result.zeros = mask.multiReplace(("X","0"), ("0","1"), ("1","0")).parseBinInt
@@ -32,12 +35,11 @@ proc parseInstruction(line: string): Instruction =
     discard scanf(line, "mem[$i] = $i", result.address, result.value)
 
 
-proc readInstructions(filename: string): seq[Instruction] =
-  for line in lines(filename):
-    result.add parseInstruction(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseInstruction)
 
 
-proc run(list: seq[Instruction], decoder: Decoder): Memory =
+proc run(list: Data, decoder: Decoder): Memory =
   var mask: Mask
   for item in list:
     case item.kind:
@@ -74,10 +76,8 @@ proc sum(memory: Memory): int =
   for value in values(memory): result += value
 
 
-proc partOne(list: seq[Instruction]): int = list.run(decoder1).sum
-proc partTwo(list: seq[Instruction]): int = list.run(decoder2).sum
+let data = parseData()
 
-
-let list = readInstructions("inputs/14.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.run(decoder1).sum
+  echo data.run(decoder2).sum

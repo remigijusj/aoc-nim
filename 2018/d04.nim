@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 4
 
 import std/[strscans,strutils,sequtils,algorithm,tables]
+import ../utils/common
 
 type
   Schedule = tuple
@@ -12,7 +13,7 @@ type
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines.sorted
+  let lines = readInput().strip.splitLines.sorted
 
   var month, day, hour, min, start, guard, datex: int
   var slices:  seq[Slice[int]]
@@ -43,7 +44,7 @@ func topGuardMinute1(data: Data): int =
   var asleep: CountTable[int]
 
   for schedule in data:
-    let minutes = schedule.slices.mapIt(it.len).foldl(a + b, 0)
+    let minutes = schedule.slices.mapIt(it.len).sum
     asleep.inc(schedule.guard, minutes)
   result = asleep.largest.key
 
@@ -69,5 +70,6 @@ proc topGuardMinute2(data: Data): int =
 
 let data = parseData()
 
-echo data.topGuardMinute1
-echo data.topGuardMinute2
+benchmark:
+  echo data.topGuardMinute1
+  echo data.topGuardMinute2

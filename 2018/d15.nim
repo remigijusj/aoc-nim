@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 15
 
 import std/[strutils,sequtils,deques,sets,tables,algorithm]
+import ../utils/common
 
 type
   XY = tuple[x, y: int]
@@ -38,7 +39,7 @@ func alive(unit: Unit): bool = unit.hp > 0
 
 
 proc parseData: Data =
-  result.grid = readAll(stdin).strip.splitLines
+  result.grid = readInput().strip.splitLines
   for y, line in result.grid:
     for x, c in line:
       if c in {'E','G'}:
@@ -124,7 +125,7 @@ func combatFinished(data: Data): bool =
 
 
 func hitPointsLeft(data: Data): int =
-  result = data.units.mapIt(it.hp).foldl(a + b, 0)
+  result = data.units.mapIt(it.hp).sum
 
 
 func combatOutcome(data: Data): tuple[score, dead: int] =
@@ -158,5 +159,6 @@ func combatOutcomeZeroElfDeaths(data: Data): int =
 
 let data = parseData()
 
-echo data.combatOutcome[0]
-echo data.combatOutcomeZeroElfDeaths
+benchmark:
+  echo data.combatOutcome[0]
+  echo data.combatOutcomeZeroElfDeaths

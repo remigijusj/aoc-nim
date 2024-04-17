@@ -1,10 +1,11 @@
 # Advent of Code 2018 - Day 14
 
 import std/[strutils]
+import ../utils/common
 
 type Data = string
 
-proc parseData: Data = readAll(stdin).strip
+proc parseData: Data = readInput().strip
 
 
 func runRecipes1(data: Data): string =
@@ -43,5 +44,6 @@ func runRecipes2(data: Data): string =
 
 let data = parseData()
 
-echo runRecipes1(data)
-echo runRecipes2(data)
+benchmark:
+  echo data.runRecipes1
+  echo data.runRecipes2

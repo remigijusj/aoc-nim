@@ -2,16 +2,18 @@
 
 import std/[strutils,sequtils,deques]
 import intcode
+import ../utils/common
 
-type Data = seq[int]
+type
+  Data = seq[int]
 
-type Network = seq[Intcode]
+  Network = seq[Intcode]
 
-type Nat = tuple[x, y: int]
+  Nat = tuple[x, y: int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc buildNetwork(data: Data, size: int): Network =
@@ -29,7 +31,7 @@ proc idle(network: Network): bool =
   return true
 
 
-proc run(network: var Network, short = false): int =
+proc run(network: var Network, short: bool): int =
   var nat, nat1: Nat
 
   for step in 1..int.high:
@@ -57,16 +59,13 @@ proc run(network: var Network, short = false): int =
       nat1 = nat
 
 
-proc partOne(data: Data): int =
+proc runNetwork(data: Data, short: bool): int =
   var network = data.buildNetwork(50)
-  result = network.run(true)
+  result = network.run(short)
 
 
-proc partTwo(data: Data): int =
-  var network = data.buildNetwork(50)
-  result = network.run
+let data = parseData()
 
-
-let data = parseData("inputs/23.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.runNetwork(true)
+  echo data.runNetwork(false)

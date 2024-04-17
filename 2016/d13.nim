@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 func isWall(data: Data, this: XY): bool =

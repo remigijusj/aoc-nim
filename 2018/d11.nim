@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 11
 
 import std/[strutils,tables]
+import ../utils/common
 
 type
   Data = int
@@ -13,7 +14,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 func power(data: Data, cell: XY): int =
@@ -52,7 +53,9 @@ func output(square: Square, fmt: string): string =
 
 
 let data = parseData()
-let grid = data.prefixGrid
 
-echo grid.largestPowerSquare(3).output("$#,$#")
-echo grid.largestPowerSquare(1..300).output("$#,$#,$#")
+benchmark:
+  let grid = data.prefixGrid
+
+  echo grid.largestPowerSquare(3).output("$#,$#")
+  echo grid.largestPowerSquare(1..300).output("$#,$#,$#")

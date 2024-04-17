@@ -1,7 +1,8 @@
 # Advent of Code 2021 - Day 22
 
-import std/[sequtils, strscans, sets]
+import std/[sequtils, strutils, strscans, sets]
 import memo
+import ../utils/common
 
 type
   Range = tuple[min, max: int]
@@ -24,8 +25,8 @@ proc parseRule(line: string): Rule =
   result = (o == "on", @[x, y, z].map(parseRange))
 
 
-proc parseData(filename: string): Data =
-  lines(filename).toSeq.map(parseRule)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseRule)
 
 
 proc empty(b: Box): bool =
@@ -80,14 +81,12 @@ proc clamp(bs: Boxes, box: Box): Boxes =
       result.incl(b1)
 
 
-proc volume(b: Box): int = b.mapIt(it.max - it.min + 1).foldl(a * b)
-proc volume(bs: Boxes): int = bs.toSeq.map(volume).foldl(a + b)
+proc volume(b: Box): int = b.mapIt(it.max - it.min + 1).prod
+proc volume(bs: Boxes): int = bs.toSeq.map(volume).sum
 
 
-proc partOne(data: Data): int = data.applyRules.clamp(newSeqWith(3, (-50, 50))).volume
-proc partTwo(data: Data): int = data.applyRules.volume
+let data = parseData()
 
-
-let data = parseData("inputs/22.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.applyRules.clamp(newSeqWith(3, (-50, 50))).volume
+  echo data.applyRules.volume

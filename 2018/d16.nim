@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 16
 
 import std/[strscans,strutils,sequtils,sets]
+import ../utils/common
 
 type
   Regs = array[4, int]
@@ -50,7 +51,7 @@ func parseSample(line: string): Sample =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n\n\n")
+  let parts = readInput().strip.split("\n\n\n\n")
   result.samples = parts[0].split("\n\n").map(parseSample)
   result.lines = parts[1].splitLines.map(parseInstr)
 
@@ -92,5 +93,6 @@ proc run(opindex: array[16, int], lines: seq[Instr]): Regs =
 
 let data = parseData()
 
-echo data.samples.countIt(it.fitsOpcodes.len >= 3)
-echo data.samples.matchOpcodes.resolve.run(data.lines)[0]
+benchmark:
+  echo data.samples.countIt(it.fitsOpcodes.len >= 3)
+  echo data.samples.matchOpcodes.resolve.run(data.lines)[0]

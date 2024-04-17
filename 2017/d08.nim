@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 8
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type
   Instruction = tuple
@@ -23,7 +24,7 @@ func parseInstruction(line: string): Instruction =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 func satisfy(val: int, it: Instruction): bool =
@@ -46,7 +47,8 @@ func runInstructions(data: Data): tuple[regs: Regs, maxv: int] =
 
 
 let data = parseData()
-let (regs, maxv) = data.runInstructions
 
-echo regs.largest.val
-echo maxv
+benchmark:
+  let (regs, maxv) = data.runInstructions
+  echo regs.largest.val
+  echo maxv

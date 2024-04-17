@@ -14,7 +14,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 proc scanParts(data: Data): (Parts, Gears) =

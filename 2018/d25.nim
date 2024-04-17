@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 25
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type
   Point = array[4, int]
@@ -8,7 +9,7 @@ type
   Data = seq[Point]
 
 
-func dist(a, b: Point): int = zip(a, b).mapIt(abs(it[0] - it[1])).foldl(a + b)
+func dist(a, b: Point): int = zip(a, b).mapIt(abs(it[0] - it[1])).sum
 
 
 func parsePoint(line: string): Point =
@@ -17,7 +18,7 @@ func parsePoint(line: string): Point =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parsePoint)
+  readInput().strip.splitLines.map(parsePoint)
 
 
 func countConstellations(data: Data): int =
@@ -42,4 +43,5 @@ func countConstellations(data: Data): int =
 
 let data = parseData()
 
-echo data.countConstellations
+benchmark:
+  echo data.countConstellations

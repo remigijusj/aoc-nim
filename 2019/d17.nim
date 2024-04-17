@@ -2,14 +2,17 @@
 
 import std/[strutils,sequtils,sets,nre]
 import intcode
+import ../utils/common
 
-type Cell = tuple[x, y: int]
+type
+  Cell = tuple[x, y: int]
 
-type Op = tuple[rot: char, units: int]
+  Op = tuple[rot: char, units: int]
 
-type Data = seq[int]
+  Data = seq[int]
 
 const dirs = "^>v<"
+
 
 # data functions
 func move(cell: Cell, dir: char, units = 1): Cell =
@@ -28,8 +31,8 @@ func turn(dir, rot: char): char =
 var ascii: string
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc sumAlignmentParams(ascii: string): int =
@@ -41,7 +44,7 @@ proc sumAlignmentParams(ascii: string): int =
         result += li * ci
 
 
-proc partOne(data: Data): int =
+proc sumAlignments(data: Data): int =
   var ic = data.toIntcode
   let output = ic.run
   ascii = output.mapIt(it.chr).join
@@ -97,7 +100,7 @@ proc buildProgram(ascii: string): string =
   result = [main, subs[0], subs[1], subs[2]].join("\n") & "\nN\n"
 
 
-proc partTwo(data: Data): int =
+proc collectedDust(data: Data): int =
   var ic = data.toIntcode
   ic.setVal(2, 0)
   let program = ascii.buildProgram.mapIt(it.int)
@@ -107,6 +110,8 @@ proc partTwo(data: Data): int =
     # write(stdout, result.chr)
 
 
-let data = parseData("inputs/17.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.sumAlignments
+  echo data.collectedDust

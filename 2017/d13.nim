@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 13
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type Data = Table[int, int]
 
@@ -10,7 +11,7 @@ func parseScanner(line: string): (int, int) =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseScanner).toTable
+  readInput().strip.splitLines.map(parseScanner).toTable
 
 
 func maxDepth(data: Data): int =
@@ -40,5 +41,6 @@ func smallestDelay(data: Data): int =
 
 let data = parseData()
 
-echo data.totalSeverity
-echo data.smallestDelay
+benchmark:
+  echo data.totalSeverity
+  echo data.smallestDelay

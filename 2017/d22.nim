@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 22
 
 import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type
   Data = seq[string]
@@ -21,7 +22,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func buildGrid(data: Data): Grid =
@@ -63,5 +64,6 @@ func countInfections(data: Data, bursts: int, variant: int): int =
 
 let data = parseData()
 
-echo data.countInfections(10_000, 2)
-echo data.countInfections(10_000_000, 1)
+benchmark:
+  echo data.countInfections(10_000, 2)
+  echo data.countInfections(10_000_000, 1)

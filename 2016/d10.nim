@@ -17,7 +17,7 @@ proc parseData: Data =
   var value, bot, t1, t2: int
   var k1, k2: string
 
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   for line in lines:
     if line.scanf("value $i goes to bot $i", value, bot):
       result.v[value] = bot

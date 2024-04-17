@@ -17,7 +17,7 @@ func parseRepl(line: string): Repl =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n")
+  let parts = readInput().strip.split("\n\n")
   result.replacements = parts[0].split("\n").map(parseRepl)
   result.molecule = parts[1]
 

@@ -4,16 +4,18 @@ import std/[strutils, tables, sets]
 from algorithm import reversed
 from math import ceilDiv, `^`
 import npeg
+import ../utils/common
 
-type Item = tuple[units: int, name: string]
+type
+  Item = tuple[units: int, name: string]
 
-type Rule = object
-  units: int
-  needs: Table[string, int]
+  Rule = object
+    units: int
+    needs: Table[string, int]
 
-type Data = object
-  rules: Table[string, Rule]
-  order: seq[string]
+  Data = object
+    rules: Table[string, Rule]
+    order: seq[string]
 
 
 var i: Item
@@ -48,8 +50,8 @@ proc topoSort(data: Data, name: string): seq[string] =
   result = order.reversed
 
 
-proc parseData(filename: string): Data =
-  let text = readFile(filename)
+proc parseData(): Data =
+  let text = readInput()
   assert dataParser.match(text, result).ok
   result.order = result.topoSort("FUEL")
 
@@ -80,9 +82,8 @@ proc maxFuelFromOre(data: Data, limit: int): int =
     result.dec
 
 
-proc partOne(data: Data): int = data.minOreForFuel(1)
-proc partTwo(data: Data): int = data.maxFuelFromOre(1_000_000_000_000.int)
+let data = parseData()
 
-let data = parseData("inputs/14.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.minOreForFuel(1)
+  echo data.maxFuelFromOre(1_000_000_000_000.int)

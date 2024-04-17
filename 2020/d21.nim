@@ -1,10 +1,15 @@
 # Advent of code 2020 - Day 21
 
-import strutils, sequtils, sets, tables, algorithm
+import std/[strutils, sequtils, sets, tables, algorithm]
+import ../utils/common
 
-type Item = object
-  ingredients: HashSet[string]
-  allergens: HashSet[string]
+type
+  Item = object
+    ingredients: HashSet[string]
+    allergens: HashSet[string]
+
+  Data = seq[Item]
+
 
 proc parseItem(line: string): Item =
   let cont = line.find(" (contains ")
@@ -12,12 +17,11 @@ proc parseItem(line: string): Item =
   result.allergens = line[cont+11..^2].split(", ").toHashSet
 
 
-proc readItems(filename: string): seq[Item] =
-  for line in lines(filename):
-    result.add parseItem(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseItem)
 
 
-proc combineAllergens(list: seq[Item]): Table[string, HashSet[string]] =
+proc combineAllergens(list: Data): Table[string, HashSet[string]] =
   for item in list:
     for a in item.allergens:
       if a in result:
@@ -26,7 +30,7 @@ proc combineAllergens(list: seq[Item]): Table[string, HashSet[string]] =
         result[a] = item.ingredients
 
 
-proc ingredientAllergens(list: seq[Item]): Table[string, string] =
+proc ingredientAllergens(list: Data): Table[string, string] =
   var a2is = list.combineAllergens
   while a2is.len > 0:
     let uniques = a2is.keys.toSeq.filterIt(a2is[it].card == 1)
@@ -38,7 +42,7 @@ proc ingredientAllergens(list: seq[Item]): Table[string, string] =
 
 
 
-proc countSafeIngredients(list: seq[Item]): int =
+proc countSafeIngredients(list: Data): int =
   let i2a = list.ingredientAllergens
   for item in list:
     for i in item.ingredients:
@@ -46,15 +50,13 @@ proc countSafeIngredients(list: seq[Item]): int =
 
 
 # sorted by allergen alphabetically
-proc dangerousIngredients(list: seq[Item]): seq[string] =
+proc dangerousIngredients(list: Data): seq[string] =
   let i2a = list.ingredientAllergens
   result = i2a.keys.toSeq.sortedByIt(i2a[it])
 
 
-proc partOne(list: seq[Item]): int = list.countSafeIngredients
-proc partTwo(list: seq[Item]): string = list.dangerousIngredients.join(",")
+var data = parseData()
 
-
-var list = readItems("inputs/21.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.countSafeIngredients
+  echo data.dangerousIngredients.join(",")

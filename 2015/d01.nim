@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func simulate(data: Data): Result =

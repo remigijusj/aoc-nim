@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 2
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type
   Instruction = tuple[cmd: string, units: int]
@@ -16,8 +17,8 @@ proc parseInstruction(line: string): Instruction =
   result.units = parts[1].parseInt
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.splitLines.mapIt(it.parseInstruction)
+proc parseData: Data =
+  readInput().strip.splitLines.mapIt(it.parseInstruction)
 
 
 proc actSimple(pos: var Position, inst: Instruction) =
@@ -43,10 +44,9 @@ proc reduce(data: Data, action: proc(pos: var Position, inst: Instruction)): Pos
 
 proc product(pos: Position): int = pos.horiz * pos.depth
 
-proc partOne(data: Data): int = data.reduce(actSimple).product
-proc partTwo(data: Data): int = data.reduce(actAimed).product
 
+let data = parseData()
 
-let data = parseData("inputs/02.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.reduce(actSimple).product
+  echo data.reduce(actAimed).product

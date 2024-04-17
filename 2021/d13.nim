@@ -23,8 +23,8 @@ proc parseFold(line: string): Fold =
   if ok: result = (axis, value)
 
 
-proc parseData(filename: string): Data =
-  let parts = readFile(filename).strip.split("\n\n")
+proc parseData: Data =
+  let parts = readInput().strip.split("\n\n")
   result.points = parts[0].split("\n").mapIt(it.parsePoint)
   result.folds = parts[1].split("\n").mapIt(it.parseFold)
 
@@ -54,10 +54,8 @@ proc `$`(points: seq[Point]): string =
   result = lines.mapIt(it.join).join("\n")
 
 
-proc partOne(data: Data): int = data.applyFolds(folds = data.folds[0..0]).len
-proc partTwo(data: Data): string = $data.applyFolds
+let data = parseData()
 
-
-let data = parseData("inputs/13.txt")
-echo partOne(data)
-echo partTwo(data).decodeBF6
+benchmark:
+  echo data.applyFolds(folds = data.folds[0..0]).len
+  echo ($data.applyFolds).decodeBF6

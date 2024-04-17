@@ -1,12 +1,13 @@
 # Advent of Code 2019 - Day 4
 
 import std/[strscans, sequtils]
+import ../utils/common
 
 type Data = Slice[int]
 
 
-proc parseData(filename: string): Data =
-  discard readFile(filename).scanf("$i-$i", result.a, result.b)
+proc parseData: Data =
+  discard readInput().scanf("$i-$i", result.a, result.b)
 
 
 proc hasDrop(code: string): bool =
@@ -29,9 +30,8 @@ proc isGood(num: int, strict = false): bool =
   result = not code.hasDrop and code.hasPair(strict)
 
 
-proc partOne(data: Data): int = data.countIt(it.isGood)
-proc partTwo(data: Data): int = data.countIt(it.isGood(true))
+let data = parseData()
 
-let data = parseData("inputs/04.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.countIt(it.isGood)
+  echo data.countIt(it.isGood(true))

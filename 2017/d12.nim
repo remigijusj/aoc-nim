@@ -1,12 +1,13 @@
 # Advent of Code 2017 - Day 12
 
 import std/[strutils,sequtils,sets,tables]
+import ../utils/common
 
 type Data = Table[int, seq[int]]
 
 
 proc parseData: Data =
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     let parts = line.split(" <-> ")
     let node = parseInt(parts[0])
     result[node] = parts[1].split(", ").mapIt(it.parseInt)
@@ -32,5 +33,6 @@ func componentsCount(data: Data): int =
 
 let data = parseData()
 
-echo data.component(0).card
-echo data.componentsCount
+benchmark:
+  echo data.component(0).card
+  echo data.componentsCount

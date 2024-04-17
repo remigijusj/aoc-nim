@@ -18,7 +18,7 @@ func parseRoom(line: string): Room =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseRoom)
+  readInput().strip.splitLines.map(parseRoom)
 
 
 func checksum(room: Room): string =
@@ -45,5 +45,5 @@ var data = parseData()
 data.keepItIf(it.checksum == it.xsum)
 
 benchmark:
-  echo data.mapIt(it.sectorID).foldl(a + b)
+  echo data.mapIt(it.sectorID).sum
   echo data.findNorthPole.sectorID

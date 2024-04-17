@@ -1,6 +1,7 @@
 # Advent of code 2020 - Day 16
 
-import strutils, sequtils, strscans
+import std/[strutils, sequtils, strscans, packedsets]
+import ../utils/common
 
 # departure track: 33-197 or 203-957
 type Rule = object
@@ -18,11 +19,12 @@ type Data = object
 proc parseRule(line: string): Rule =
   discard line.scanf("$+: $i-$i or $i-$i", result.field, result.r1_from, result.r1_till, result.r2_from, result.r2_till)
 
+
 proc parseTicket(line: string): Ticket = line.split(',').mapIt(it.parseInt)
 
 
-proc readData(filename: string): Data =
-  let parts = readFile(filename).split("\n\n")
+proc parseData: Data =
+  let parts = readInput().split("\n\n")
   for line in parts[0].splitLines:
     result.rules.add(line.parseRule)
 
@@ -49,10 +51,10 @@ proc nearbyInvalidValues(data: Data): seq[int] =
       result.add val
 
 
-proc unifyRules(list: var seq[set[int8]]) =
-  var uniques: set[int8]
+proc unifyRules(list: var seq[PackedSet[int]]) =
+  var uniques: PackedSet[int]
   while true:
-    uniques = list.filterIt(it.card == 1).foldl(a + b)
+    uniques = list.filterIt(it.card == 1).sum
     for idx, subset in list:
       if subset <= uniques: continue
       list[idx] = subset - uniques
@@ -60,16 +62,16 @@ proc unifyRules(list: var seq[set[int8]]) =
     if uniques.len == list.len: break
 
 
-proc rulesMatching(rules: seq[Rule], values: seq[int]): set[int8] =
+proc rulesMatching(rules: seq[Rule], values: seq[int]): PackedSet[int] =
   for ri, rule in rules:
     if values.allIt(rule.match(it)):
-      result.incl(ri.int8)
+      result.incl(ri)
 
 
 proc inferFields(data: Data): seq[string] =
   var tickets: seq[Ticket] = data.nearby.filterIt(it.invalidValues(data.rules).len == 0)
   tickets.add(data.ticket)
-  var matching: seq[set[int8]]
+  var matching: seq[PackedSet[int]]
   for idx in 0..<data.ticket.len:
     matching.add data.rules.rulesMatching(tickets.mapIt(it[idx]))
 
@@ -84,10 +86,8 @@ proc departureValues(fields: seq[string], ticket: Ticket): seq[int] =
       result.add ticket[idx]
 
 
-proc partOne(data: Data): int = data.nearbyInvalidValues.foldl(a + b)
-proc partTwo(data: Data): int = data.inferFields.departureValues(data.ticket).foldl(a * b)
+let data = parseData()
 
-
-let data = readData("inputs/16.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.nearbyInvalidValues.sum
+  echo data.inferFields.departureValues(data.ticket).prod

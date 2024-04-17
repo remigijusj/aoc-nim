@@ -1,6 +1,9 @@
 # Advent of code 2020 - Day 5
 
-import strutils, sequtils, algorithm
+import std/[strutils, sequtils, algorithm]
+import ../utils/common
+
+type Data = seq[int]
 
 
 proc decodeBinary(code, lo, hi: string): int =
@@ -14,12 +17,11 @@ proc parseSeat(line: string): int =
   return row * 8 + col
 
 
-proc seatList(filename: string): seq[int] =
-  for line in lines(filename):
-    result.add parseSeat(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parseSeat)
 
 
-proc findGap(list: seq[int]): int =
+proc findGap(list: Data): int =
   let list = list.sorted
   let first = list[0]
   for i, seat in list:
@@ -27,10 +29,8 @@ proc findGap(list: seq[int]): int =
       return first + i
 
 
-proc partOne(list: seq[int]): int = list.max
-proc partTwo(list: seq[int]): int = list.findGap
+let data = parseData()
 
-
-let list = seatList("inputs/05.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.max
+  echo data.findGap

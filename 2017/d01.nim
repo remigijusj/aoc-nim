@@ -1,12 +1,13 @@
 # Advent of Code 2017 - Day 1
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[int]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.mapIt(it.ord - '0'.ord)
+  readInput().strip.mapIt(it.ord - '0'.ord)
 
 
 func sumMatching(data: Data, delta: int): int =
@@ -18,5 +19,6 @@ func sumMatching(data: Data, delta: int): int =
 
 let data = parseData()
 
-echo data.sumMatching(1)
-echo data.sumMatching(data.len div 2)
+benchmark:
+  echo data.sumMatching(1)
+  echo data.sumMatching(data.len div 2)

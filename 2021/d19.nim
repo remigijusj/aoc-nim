@@ -2,6 +2,7 @@
 
 import std/[sequtils, strscans, strutils, sets, tables]
 import memo
+import ../utils/common
 
 const overlap = 12
 
@@ -28,8 +29,8 @@ proc parseReport(lines: string): Report =
       result.add(vec)
 
 
-proc parseData(filename: string): Data =
-  for chunk in readFile(filename).strip.split("\n\n"):
+proc parseData: Data =
+  for chunk in readInput().strip.split("\n\n"):
     result.add chunk.parseReport
 
 
@@ -98,14 +99,12 @@ proc scanners(table: Aligns): HashSet[Vector] =
 proc maxDistance(vectors: HashSet[Vector]): int =
   for v1 in vectors:
     for v2 in vectors:
-      let dist = (v1 - v2).mapIt(it.abs).foldl(a + b)
+      let dist = (v1 - v2).mapIt(it.abs).sum
       if dist > result: result = dist
 
 
-proc partOne(data: Data): int = data.alignAll.beacons(data).card
-proc partTwo(data: Data): int = data.alignAll.scanners.maxDistance
+let data = parseData()
 
-
-let data = parseData("inputs/19.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.alignAll.beacons(data).card
+  echo data.alignAll.scanners.maxDistance

@@ -7,7 +7,7 @@ type Data = string
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func decompressedLen(data: Data, recursive=false): int =

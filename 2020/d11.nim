@@ -1,13 +1,15 @@
 # Advent of code 2020 - Day 11
 
-import strutils
+import std/strutils
+import ../utils/common
 
 type State = object
   data: string
   width, height: int
 
-proc readState(filename: string): State =
-  result.data = readFile(filename)
+
+proc parseData: State =
+  result.data = readInput()
   result.width = result.data.find('\n') + 1
   result.height = result.data.count('\n')
 
@@ -51,10 +53,8 @@ proc equilibrium(state: State, limit: int, visibility: bool = false): State =
     swap(result, state)
 
 
-proc partOne(state: State): int = state.equilibrium(limit = 4).data.count('#')
-proc partTwo(state: State): int = state.equilibrium(limit = 5, visibility = true).data.count('#')
+let state = parseData()
 
-
-let state = readState("inputs/11.txt")
-echo partOne(state)
-echo partTwo(state)
+benchmark:
+  echo state.equilibrium(limit = 4).data.count('#')
+  echo state.equilibrium(limit = 5, visibility = true).data.count('#')

@@ -1,6 +1,8 @@
 # Advent of code 2020 - Day 19
 
-import sequtils, strutils, tables, regex
+import std/[sequtils, strutils, tables]
+import regex
+import ../utils/common
 
 type Data = object
   rules: Table[string, string]
@@ -27,8 +29,8 @@ proc compile(data: var Data, key: string): string =
   return data.regex[key]
 
 
-proc readData(filename: string): Data =
-  let parts = readFile(filename).split("\n\n")
+proc parseData: Data =
+  let parts = readInput().strip.split("\n\n")
   for line in parts[0].splitLines:
     let parts = line.split(": ", 2)
     result.rules[parts[0]] = parts[1]
@@ -39,16 +41,19 @@ proc readData(filename: string): Data =
   discard result.compile("0")
 
 
-proc partOne(data: Data): int =
+proc countMatching1(data: Data): int =
   let regex = re(data.regex["0"])
   data.messages.countIt(it.match(regex))
 
-proc partTwo(data: Data): int =
+
+proc countMatching2(data: Data): int =
   var m: RegexMatch
   let regex = re("(" & data.regex["42"] & ")+(" & data.regex["31"] & ")+")
   data.messages.countIt(it.match(regex, m) and m.group(0, it).len > m.group(1, it).len)
 
 
-let data = readData("inputs/19.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.countMatching1
+  echo data.countMatching2

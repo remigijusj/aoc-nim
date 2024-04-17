@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 23
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type
   RegVal = object
@@ -30,7 +31,7 @@ func parseInstruction(line: string): Instruction =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 template mem(rv): int =
@@ -76,5 +77,6 @@ func countComposite(b, c, d: int): int =
 
 let data = parseData()
 
-echo data.runProgram
-echo countComposite(109_900, 126_900, 17)
+benchmark:
+  echo data.runProgram
+  echo countComposite(109_900, 126_900, 17)

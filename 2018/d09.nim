@@ -1,12 +1,13 @@
 # Advent of Code 2018 - Day 9
 
 import std/[strscans,strutils,lists]
+import ../utils/common
 
 type Data = tuple[players, marbles: int]
 
 
 proc parseData: Data =
-  let data = readAll(stdin).strip
+  let data = readInput().strip
   assert data.scanf("$i players; last marble is worth $i points", result.players, result.marbles)
 
 
@@ -32,5 +33,6 @@ func maximumScore(players, marbles: int): int =
 
 let data = parseData()
 
-echo maximumScore(data.players, data.marbles)
-echo maximumScore(data.players, data.marbles * 100)
+benchmark:
+  echo maximumScore(data.players, data.marbles)
+  echo maximumScore(data.players, data.marbles * 100)

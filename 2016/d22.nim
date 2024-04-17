@@ -18,7 +18,7 @@ func parseNode(line: string): Node =
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   result = lines[2..^1].map(parseNode)
 
 

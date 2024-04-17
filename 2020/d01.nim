@@ -1,15 +1,17 @@
 # Advent of code 2020 - Day 1
 
-import strutils, algorithm
+import std/[strutils, sequtils, algorithm]
+import ../utils/common
 
-proc sortedIntList(filename: string): seq[int] =
-  for line in lines(filename):
-    result.add parseInt(line)
+type Data = seq[int]
 
+
+proc parseData: Data =
+  result = readInput().strip.splitLines.map(parseInt)
   result.sort
 
 
-proc splitProduct2(list: seq[int], target: int): int =
+proc splitProduct2(list: Data, target: int): int =
   for i, x in list:
     if x >= target: break
     for y in list[i+1 .. ^1]:
@@ -17,7 +19,7 @@ proc splitProduct2(list: seq[int], target: int): int =
         return x * y
 
 
-proc splitProduct3(list: seq[int], target: int): int =
+proc splitProduct3(list: Data, target: int): int =
   for i, x in list:
     if x >= target: break
     let y = splitProduct2(list[i+1 .. ^1], target - x)
@@ -25,10 +27,8 @@ proc splitProduct3(list: seq[int], target: int): int =
       return x * y
 
 
-proc partOne(list: seq[int]): int = splitProduct2(list, 2020)
-proc partTwo(list: seq[int]): int = splitProduct3(list, 2020)
+let data = parseData()
 
-
-let list = sortedIntList("inputs/01.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.splitProduct2(2020)
+  echo data.splitProduct3(2020)

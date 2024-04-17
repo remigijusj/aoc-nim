@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 24
 
 import std/[strutils,sequtils,bitops]
+import ../utils/common
 
 type
   Piece = array[2, int]
@@ -19,7 +20,7 @@ func parsePiece(line: string): Piece =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parsePiece)
+  readInput().strip.splitLines.map(parsePiece)
 
 
 iterator bridges(data: Data, taken: int, start: int): Bridge {.closure.} =
@@ -49,5 +50,6 @@ func longestBridge(data: Data): Bridge =
 
 let data = parseData()
 
-echo data.strongestBridge.str
-echo data.longestBridge.str
+benchmark:
+  echo data.strongestBridge.str
+  echo data.longestBridge.str

@@ -1,13 +1,14 @@
 # Advent of Code 2019 - Day 1
 
-import std/[strutils]
+import std/[strutils, sequtils]
 from math import floor
+import ../utils/common
 
 type Data = seq[int]
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     result.add line.parseInt
 
 
@@ -20,15 +21,8 @@ proc recursiveFuel(mass: int): int =
   if fuel > 0: result = fuel + recursiveFuel(fuel)
 
 
-proc partOne(data: Data): int =
-  for mass in data:
-    result += fuel(mass)
+let data = parseData()
 
-proc partTwo(data: Data): int =
-  for mass in data:
-    result += recursiveFuel(mass)
-
-
-let data = parseData("inputs/01.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.map(fuel).sum
+  echo data.map(recursiveFuel).sum

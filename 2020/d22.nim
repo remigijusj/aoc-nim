@@ -1,14 +1,16 @@
 # Advent of code 2020 - Day 22
 
-import strutils, sequtils, sets
+import std/[strutils, sequtils, sets]
+import ../utils/common
 
 type
   Game = array[2, seq[int]]
 
   Outcome = tuple[winner: int, cards: seq[int]]
 
-proc readData(filename: string): Game =
-  for part in readFile(filename).strip.split("\n\n"):
+
+proc parseData: Game =
+  for part in readInput().strip.split("\n\n"):
     let lines = part.splitLines
     if part.startsWith("Player 1"): result[0] = lines[1..^1].mapIt(it.parseInt)
     if part.startsWith("Player 2"): result[1] = lines[1..^1].mapIt(it.parseInt)
@@ -52,10 +54,8 @@ proc score(win: Outcome): int =
     result += val * (win.cards.len-i)
 
 
-proc partOne(game: Game): int = game.combat.score
-proc partTwo(game: Game): int = game.combat(recursive = true).score
+let game = parseData()
 
-
-let data = readData("inputs/22.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo game.combat.score
+  echo game.combat(recursive = true).score

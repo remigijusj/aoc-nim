@@ -1,10 +1,10 @@
 # Advent of Code 2018 - Day 5
 
-import std/[strutils,sequtils,sugar]
-import timeit
+import std/[strutils]
+import ../utils/common
 
 proc parseData: string =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func reduced(data: string, skip = ' '): string =
@@ -26,5 +26,6 @@ func improvedLen(data: string): int =
 
 let data = parseData()
 
-echo data.reduced.len
-echo data.improvedLen
+benchmark:
+  echo data.reduced.len
+  echo data.improvedLen

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 24
 
 import std/[strutils,heapqueue,sets,math]
+import ../utils/common
 
 type
   Data = seq[string]
@@ -18,7 +19,7 @@ func dist(a, b: XY): int = (a.x - b.x).abs + (a.y - b.y).abs
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 iterator neighbors(data: Data, pos: XY): XY =
@@ -72,5 +73,6 @@ proc shortestPathX3(data: Data): int =
 
 let data = parseData()
 
-echo data.shortestPath
-echo data.shortestPathX3
+benchmark:
+  echo data.shortestPath
+  echo data.shortestPathX3

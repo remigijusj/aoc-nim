@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 7
 
 import std/[strutils,sequtils,options,algorithm]
+import ../utils/common
 
 type
   Step = char
@@ -17,7 +18,7 @@ func weight(step: Step): int = step.ord - 'A'.ord
 
 # "Step A must be finished before step B can begin."
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.mapIt((it[5], it[36]))
+  readInput().strip.splitLines.mapIt((it[5], it[36]))
 
 
 func allSteps(data: Data): set[Step] =
@@ -79,5 +80,6 @@ proc teamWork(data: Data, count, duration: int): int =
 
 let data = parseData()
 
-echo data.orderedSteps().join
-echo data.teamWork(5, 60)
+benchmark:
+  echo data.orderedSteps().join
+  echo data.teamWork(5, 60)

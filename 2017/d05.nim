@@ -1,12 +1,13 @@
 # Advent of Code 2017 - Day 5
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[int]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInt)
+  readInput().strip.splitLines.map(parseInt)
 
 
 func stepsToExit(data: Data, flip = false): int =
@@ -24,5 +25,6 @@ func stepsToExit(data: Data, flip = false): int =
 
 let data = parseData()
 
-echo data.stepsToExit
-echo data.stepsToExit(true)
+benchmark:
+  echo data.stepsToExit
+  echo data.stepsToExit(true)

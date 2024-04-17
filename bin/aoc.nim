@@ -90,9 +90,7 @@ proc compileProgram(yd: YearDay, opt: string) =
 
 proc runProgram(yd: YearDay, clipboard = false): string =
   setCurrentDir(getPath(fmt"{yd.year}"))
-  if yd.year in 2019..2021:
-    execProcess(fmt"cmd /c d{yd.day:02}.exe")
-  elif clipboard:
+  if clipboard:
     execProcess(fmt"cmd /c pbpaste | d{yd.day:02}.exe")
   else:
     execProcess(fmt"cmd /c d{yd.day:02}.exe < ../data/{yd.year}/inputs/{yd.day:02}.txt")

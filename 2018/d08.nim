@@ -1,12 +1,13 @@
 # Advent of Code 2018 - Day 8
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type Data = seq[int]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split(' ').map(parseInt)
+  readInput().strip.split(' ').map(parseInt)
 
 
 func fold(data: Data, value: bool): int =
@@ -37,5 +38,6 @@ func fold(data: Data, value: bool): int =
 
 let data = parseData()
 
-echo data.fold(false)
-echo data.fold(true)
+benchmark:
+  echo data.fold(false)
+  echo data.fold(true)

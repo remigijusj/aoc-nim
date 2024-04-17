@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 16
 
 import std/[strscans,strutils,sequtils,tables,math,bitops,algorithm]
+import ../utils/common
 
 type
   Node = tuple[flow: uint8, name: string, adjacent: seq[string]]
@@ -18,7 +19,7 @@ func parseNode(line: string): Node =
 
 
 proc parseData: Data =
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     let node = line.parseNode
     result[node.name] = node
 
@@ -105,13 +106,6 @@ proc maxPressure2(s: uint32): uint16 =
   cache2[s] = result
 
 
-echo maxPressure1(packs (30'u8, nodes.len.uint8, (2^nodes.len-1).uint16))
-echo maxPressure2(packs (26'u8, nodes.len.uint8, (2^nodes.len-1).uint16))
-
-if false:
-  let c0 = cache1.len.float
-  let c1 = cache1.countIt(it < uint16.high).float / c0
-  let c2 = cache2.countIt(it < uint16.high).float / c0
-  let c10 = cache1.countIt(it > 0).float / c0
-  let c20 = cache2.countIt(it > 0).float / c0
-  debugecho (c1.round(4), c10.round(4), c2.round(4), c20.round(4))
+benchmark:
+  echo maxPressure1(packs (30'u8, nodes.len.uint8, (2^nodes.len-1).uint16))
+  echo maxPressure2(packs (26'u8, nodes.len.uint8, (2^nodes.len-1).uint16))

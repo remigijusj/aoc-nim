@@ -48,7 +48,7 @@ func parsePart(line: string): Part =
 
 
 proc parseData: Data =
-  let chunks = readAll(stdin).strip.split("\n\n")
+  let chunks = readInput().strip.split("\n\n")
   result.rules = chunks[0].splitLines.map(parseWorkflow).toTable
   result.parts = chunks[1].splitLines.map(parsePart)
 
@@ -67,7 +67,7 @@ func accepted(rules: Rules, part: Part): bool =
 
 func rating(part: Part): int = part.sum
 
-func volume(item: Combo): int = item.mapIt(it.len).foldl(a * b)
+func volume(item: Combo): int = item.mapIt(it.len).prod
 
 func `&`(x, y: Slice[int]): Slice[int] = max(x.a, y.a)..min(x.b, y.b)
 

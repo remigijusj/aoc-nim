@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 16
 
-import std/[strutils, sequtils, math]
+import std/[strutils, sequtils]
+import ../utils/common
 
 type Packet = object
   version: int
@@ -9,8 +10,8 @@ type Packet = object
   subpackets: seq[Packet]
 
 
-proc parseData(filename: string): string =
-  readFile(filename).strip
+proc parseData: string =
+  readInput().strip
 
 proc toBinary(data: string): string =
   data.parseHexStr.mapIt(it.ord.toBin(8)).foldl(a & b)
@@ -83,10 +84,9 @@ proc calcValue(packet: Packet): int =
   else: 0
 
 
-proc partOne(data: string): int = data.toBinary.parsePacket.packet.sumVersions
-proc partTwo(data: string): int = data.toBinary.parsePacket.packet.calcValue
+let data = parseData()
 
-
-let data = parseData("inputs/16.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  let packet = data.toBinary.parsePacket.packet
+  echo packet.sumVersions
+  echo packet.calcValue

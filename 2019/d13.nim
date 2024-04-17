@@ -1,20 +1,23 @@
 # Advent of Code 2019 - Day 13
 
-import std/[strutils, sequtils], intcode
+import std/[strutils, sequtils]
+import intcode
+import ../utils/common
 
 const
   symbol = " #*_o"
   vPaddle = 3
   vBall = 4
 
-type Data = seq[int]
+type
+  Data = seq[int]
 
-# x in 0..43, y in 0..23
-type Grid = array[24, array[44, int]]
+  # x in 0..43, y in 0..23
+  Grid = array[24, array[44, int]]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 func buildGrid(data: Data): Grid =
@@ -48,19 +51,21 @@ proc playArkanoid(grid: var Grid, ic: var Intcode): int =
         # grid.display(result)
 
 
-proc partOne(data: Data): int =
+proc blocksLeft(data: Data): int =
   let grid = data.buildGrid
   for row in grid:
     result.inc(row.count(2))
 
 
-proc partTwo(data: Data): int =
+proc finalScore(data: Data): int =
   var grid = data.buildGrid
   var ic = data.toIntcode
   ic.setVal(2, 0)
   result = playArkanoid(grid, ic)
 
 
-let data = parseData("inputs/13.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.blocksLeft
+  echo data.finalScore

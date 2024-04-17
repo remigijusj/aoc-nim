@@ -1,7 +1,7 @@
 # Advent of Code 2018 - Day 21
 
 import std/[sets]
-
+import ../utils/common
 
 proc mainLoop(input = 0): int =
   var r1 = input or 0x10000
@@ -23,5 +23,6 @@ proc runOptimized(): int =
     result = next
 
 
-echo mainLoop()
-echo runOptimized()
+benchmark:
+  echo mainLoop()
+  echo runOptimized()

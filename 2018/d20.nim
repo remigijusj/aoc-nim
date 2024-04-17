@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 20
 
 import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type
   Data = string
@@ -9,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip(chars = Whitespace + {'^','$'})
+  readInput().strip(chars = Whitespace + {'^','$'})
 
 
 proc walk(room: var Room, dir: char) =
@@ -41,7 +42,9 @@ func calcDist(data: Data): Dist =
 
 
 let data = parseData()
-let dist = data.calcDist.values.toSeq
 
-echo dist.max
-echo dist.countIt(it >= 1000)
+benchmark:
+  let dist = data.calcDist.values.toSeq
+
+  echo dist.max
+  echo dist.countIt(it >= 1000)

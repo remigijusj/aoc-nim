@@ -2,6 +2,7 @@
 
 import std/[strutils,sets,sequtils]
 import d10
+import ../utils/common
 
 type
   Data = string
@@ -14,7 +15,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func buildGrid(data: Data): Grid =
@@ -61,5 +62,6 @@ func setUnion(grid: Grid): Regions =
 let data = parseData()
 let grid = data.buildGrid
 
-echo grid.countSquares
-echo grid.setUnion.countIt(it.card > 0)
+benchmark:
+  echo grid.countSquares
+  echo grid.setUnion.countIt(it.card > 0)

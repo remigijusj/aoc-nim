@@ -2,6 +2,7 @@
 
 import std/[strutils,sequtils,tables]
 import npeg
+import ../utils/common
 
 type
   Data = string
@@ -26,7 +27,7 @@ const streamParser = peg("group", s: Stream):
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 proc parseStream(data: string): Stream =
@@ -36,5 +37,6 @@ proc parseStream(data: string): Stream =
 let data = parseData()
 let stream = data.parseStream
 
-echo stream.score
-echo stream.garbage
+benchmark:
+  echo stream.score
+  echo stream.garbage

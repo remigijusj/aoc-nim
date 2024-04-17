@@ -1,6 +1,8 @@
 # Advent of Code 2018 - Day 17
+# IMPORTANT: compile with -d:nimCallDepthLimit=4000
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type
   XY = tuple[x, y: int]
@@ -21,7 +23,7 @@ func `[]`(data: Data, tile: XY): Kind {.inline.} = data.getOrDefault(tile, sand)
 
 proc parseData: Data =
   var a, b, c: int
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     if line.scanf("x=$i, y=$i..$i", a, b, c):
       for y in b..c:
         result[(a, y)] = clay
@@ -69,8 +71,10 @@ proc fill(data: var Data, span: Slice[int], tile: XY, down = true) =
 
 
 var data = parseData()
-let span = data.verticalSpan
-data.fill(span, (500, span.a))
 
-echo data.values.countIt(it in {still, flows})
-echo data.values.countIt(it in {still})
+benchmark:
+  let span = data.verticalSpan
+  data.fill(span, (500, span.a))
+
+  echo data.values.countIt(it in {still, flows})
+  echo data.values.countIt(it in {still})

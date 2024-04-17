@@ -11,7 +11,7 @@ let repeat = re"(.)\1{2,4}"
 
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 iterator keys(data: Data, stretch: bool): (int, string) =

@@ -16,7 +16,7 @@ func parseInterval(line: string): Interval =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInterval)
+  readInput().strip.splitLines.map(parseInterval)
 
 
 proc `<`(x, y: Interval): bool {.inline.} =

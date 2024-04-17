@@ -1,14 +1,15 @@
 # Advent of code 2020 - Day 13
 
-from strutils import parseInt, split
-from sequtils import mapIt, filterIt
+import std/[strutils, sequtils]
+import ../utils/common
 
 type Data = object
   stamp: int
   buses: seq[int]
 
-proc readData(filename: string): Data =
-  let lines = readLines(filename, 2)
+
+proc parseData: Data =
+  let lines = readInput().strip.splitLines
   result.stamp = parseInt(lines[0])
   result.buses = lines[1].split(',').mapIt(if it == "x": -1 else: it.parseInt)
 
@@ -62,10 +63,8 @@ proc findSequence(data: Data): int =
   chineseRemainder(moduli, remainders)
 
 
-proc partOne(data: Data): int = data.findEarliest
-proc partTwo(data: Data): int = data.findSequence
+let data = parseData()
 
-
-let data = readData("inputs/13.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.findEarliest
+  echo data.findSequence

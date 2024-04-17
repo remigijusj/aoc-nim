@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 20
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 type
   XYZ = array[3, int]
@@ -23,7 +24,7 @@ func parseParticle(line: string): Particle =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseParticle)
+  readInput().strip.splitLines.map(parseParticle)
 
 
 func closestToOrigin(data: Data): int =
@@ -62,5 +63,6 @@ func countUncollided(data: Data): int =
 
 let data = parseData()
 
-echo data.closestToOrigin
-echo data.countUncollided
+benchmark:
+  echo data.closestToOrigin
+  echo data.countUncollided

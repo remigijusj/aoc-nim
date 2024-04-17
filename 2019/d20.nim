@@ -1,15 +1,17 @@
 # Advent of Code 2019 - Day 20
 
 import std/[strutils,tables,deques,sets]
+import ../utils/common
 
 const S = 129
 
-type Portal = array[2, int] # external, internal
+type
+  Portal = array[2, int] # external, internal
 
-type Data = object
-  grid: string
-  portals: Table[string,Portal]
-  reverse: Table[int,(string,int)]
+  Data = object
+    grid: string
+    portals: Table[string,Portal]
+    reverse: Table[int,(string,int)]
 
 
 proc getPortalData(data: Data, pos: int): tuple[key: string, idx: int, pos: int] =
@@ -35,8 +37,9 @@ proc parsePortals(data: var Data) =
     data.reverse[port] = (key,idx)
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().splitLines:
+    if line.len == 0: continue
     assert line.len == S
     result.grid &= line
   result.parsePortals
@@ -80,10 +83,8 @@ proc findMazeExit(data: Data, recursive: bool): int =
       queue.addLast (dist+1, npos, nlevel)
 
 
-proc partOne(data: Data): int = data.findMazeExit(false)
-proc partTwo(data: Data): int = data.findMazeExit(true)
+let data = parseData()
 
-
-let data = parseData("inputs/20.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.findMazeExit(false)
+  echo data.findMazeExit(true)

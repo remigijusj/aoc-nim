@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 15
 
-import std/[sequtils, tables, heapqueue]
+import std/[sequtils, strutils, tables, heapqueue]
+import ../utils/common
 
 type
   Grid = seq[seq[int]]
@@ -13,8 +14,8 @@ type
 proc `[]`(grid: Grid, node: Node): int = grid[node.y][node.x]
 
 
-proc parseData(filename: string): Grid =
-  for line in lines(filename):
+proc parseData: Grid =
+  for line in readInput().strip.splitLines:
     result.add line.mapIt(it.ord - '0'.ord)
 
 
@@ -61,10 +62,8 @@ proc inflate(grid: Grid, times: int): Grid =
       val = (val + cx + cy - 1) mod 9 + 1
 
 
-proc partOne(data: Grid): int = data.lowestRiskDiagonal
-proc partTwo(data: Grid): int = data.inflate(5).lowestRiskDiagonal
+let data = parseData()
 
-
-let data = parseData("inputs/15.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.lowestRiskDiagonal
+  echo data.inflate(5).lowestRiskDiagonal

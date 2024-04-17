@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 4
 
 import std/[strutils,sequtils,algorithm]
+import ../utils/common
 
 type
   Pass = seq[string]
@@ -8,7 +9,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.mapIt(it.splitWhitespace)
+  readInput().strip.splitLines.mapIt(it.splitWhitespace)
 
 
 func valid1(pass: Pass): bool =
@@ -21,5 +22,6 @@ func valid2(pass: Pass): bool =
 
 let data = parseData()
 
-echo data.countIt(it.valid1)
-echo data.countIt(it.valid2)
+benchmark:
+  echo data.countIt(it.valid1)
+  echo data.countIt(it.valid2)

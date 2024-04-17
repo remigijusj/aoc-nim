@@ -2,12 +2,13 @@
 
 import std/[strutils,sequtils]
 import intcode
+import ../utils/common
 
 type Data = seq[int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc partOne(data: Data): int =
@@ -25,6 +26,8 @@ proc partTwo(data: Data): int =
   result = x * 10000 + y
 
 
-let data = parseData("inputs/19.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.partOne
+  echo data.partTwo

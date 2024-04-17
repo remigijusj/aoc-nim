@@ -1,12 +1,16 @@
 # Advent of code 2020 - Day 15
 
-import strutils, sequtils, tables
+import std/[strutils, sequtils, tables]
+import ../utils/common
 
-proc readInts(filename: string): seq[int] =
-  result = readFile(filename).strip.split(',').mapIt(it.parseInt)
+type Data = seq[int]
 
 
-proc play(list: seq[int], limit: int): int =
+proc parseData: Data =
+  result = readInput().strip.split(',').map(parseInt)
+
+
+proc play(list: Data, limit: int): int =
   var memory = newTable[int, int]()
   for i, val in list: memory[val] = i+1
   for turn in countup(list.len+1, limit-1):
@@ -15,10 +19,8 @@ proc play(list: seq[int], limit: int): int =
     result = turn - delta
 
 
-proc partOne(list: seq[int]): int = list.play(2020)
-proc partTwo(list: seq[int]): int = list.play(30000000)
+let data = parseData()
 
-
-let list = readInts("inputs/15.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.play(2020)
+  echo data.play(30_000_000)

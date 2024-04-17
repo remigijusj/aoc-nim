@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 12
 
 import std/[strutils, strscans, sequtils, tables]
+import ../utils/common
 
 type Data = Table[string, seq[string]]
 
@@ -13,8 +14,8 @@ proc parseLine(line: string, data: var Data) =
     data[b].add(a)
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     line.parseLine(result)
 
 
@@ -32,10 +33,8 @@ proc countPaths(data: Data, this: string, seen: seq[string], twice: bool): int =
       result += data.countPaths(node, seen, twice)
 
 
-proc partOne(data: Data): int = data.countPaths("start", @["start"], false)
-proc partTwo(data: Data): int = data.countPaths("start", @["start"], true)
+let data = parseData()
 
-
-let data = parseData("inputs/12.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.countPaths("start", @["start"], false)
+  echo data.countPaths("start", @["start"], true)

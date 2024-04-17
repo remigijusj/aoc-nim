@@ -39,7 +39,7 @@ const
 
 
 proc parseEnemy: Enemy =
-  let parts = readAll(stdin).strip.splitLines.mapIt(it.split(": "))
+  let parts = readInput().strip.splitLines.mapIt(it.split(": "))
   result = (parts[0][1].parseInt, parts[1][1].parseInt)
 
 

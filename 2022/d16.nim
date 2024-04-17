@@ -2,6 +2,7 @@
 
 import std/[strscans,strutils,sequtils,setutils,tables]
 import memo
+import ../utils/common
 
 type
   Node = tuple[flow: int, name: string, adjacent: seq[string]]
@@ -17,7 +18,7 @@ func parseNode(line: string): Node =
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   for idx, line in lines:
     result[idx.uint8] = line.parseNode
 
@@ -72,5 +73,6 @@ proc maxPressure2(time: int, this: uint8, closed: set[uint8]): int {.memoized.} 
   result = max(result, extra)
 
 
-echo maxPressure1(30, start, data.valves)
-echo maxPressure2(26, start, data.valves)
+benchmark:
+  echo maxPressure1(30, start, data.valves)
+  echo maxPressure2(26, start, data.valves)

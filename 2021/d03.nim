@@ -1,10 +1,12 @@
 # Advent of Code 2021 - Day 3
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type Data = seq[string]
 
-proc parseData(filename: string): Data = lines(filename).toSeq
+proc parseData: Data =
+  readInput().strip.splitLines.toSeq
 
 
 proc decideBit(data: Data, idx: int, majority: bool): char =
@@ -33,10 +35,8 @@ proc calcRating(data: Data, select: proc(data: Data, majority: bool): string): i
   result = one.parseBinInt * two.parseBinInt
 
 
-proc partOne(data: Data): int = data.calcRating(selectBits)
-proc partTwo(data: Data): int = data.calcRating(selectIterated)
+let data = parseData()
 
-
-let data = parseData("inputs/03.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.calcRating(selectBits)
+  echo data.calcRating(selectIterated)

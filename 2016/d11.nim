@@ -18,7 +18,7 @@ type
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   for floor, line in lines:
     for m in line.findIter(re" a (\w+)(?:-compatible)? (generator|microchip)"):
       let (name, kind) = (m.captures[0], m.captures[1])
@@ -64,7 +64,7 @@ iterator neighbors(state: State): State =
             yield state.modified(delta, i, j)
 
 
-proc dist(a, b: State): int = (0..<a.floor.len).mapIt(abs(a.floor[it] - b.floor[it])).foldl(a + b)
+proc dist(a, b: State): int = (0..<a.floor.len).mapIt(abs(a.floor[it] - b.floor[it])).sum
 
 proc `<`(a, b: Item): bool = a.prio < b.prio
 

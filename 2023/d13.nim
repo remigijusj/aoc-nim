@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split("\n\n").mapIt(it.splitLines)
+  readInput().strip.split("\n\n").mapIt(it.splitLines)
 
 
 func sumReflections(field: Field, expected: int): int =

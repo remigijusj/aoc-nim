@@ -14,7 +14,7 @@ func parseLine(line: string): int =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseLine)
+  readInput().strip.splitLines.map(parseLine)
 
 
 iterator runCycles(data: Data): (int, int) =
@@ -50,8 +50,6 @@ func renderCRT(data: Data): string =
 
 let data = parseData()
 
-let part1 = data.totalStrength
-let part2 = data.renderCRT.decodeBF6
-
-echo part1
-echo part2
+benchmark:
+  echo data.totalStrength
+  echo data.renderCRT.decodeBF6

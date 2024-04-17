@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 7
 
 import std/[strutils,strscans,tables]
+import ../utils/common
 
 type Data = CountTable[seq[string]]
 
@@ -10,7 +11,7 @@ proc parseData: Data =
   var name: string
   var path: seq[string]
 
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     if line.scanf("$i $+", size, name):
       for x in 0..path.len:
         result.inc(path[0..<x], size)
@@ -38,8 +39,6 @@ proc findMin(data: Data, lim: int): int =
 
 let data = parseData()
 
-let part1 = data.sumSmall(100000)
-let part2 = data.findMin(40000000)
-
-echo part1
-echo part2
+benchmark:
+  echo data.sumSmall(100000)
+  echo data.findMin(40000000)

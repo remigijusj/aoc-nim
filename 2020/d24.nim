@@ -1,6 +1,7 @@
 # Advent of code 2020 - Day 24
 
-import sequtils, sets, tables
+import std/[strutils, sequtils, sets, tables]
+import ../utils/common
 
 const DIR = {
   "w": [-1,0,1], "e": [1,0,-1], "nw": [0,-1,1], "se": [0,1,-1], "ne": [1,-1,0], "sw": [-1,1,0]
@@ -12,6 +13,9 @@ type
   Path = seq[Hex]
 
   Map = HashSet[Hex]
+
+  Data = seq[Path]
+
 
 proc `+`*(a, b: Hex): Hex = [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 
@@ -25,9 +29,8 @@ proc parsePath(line: string): Path =
       this = ""
 
 
-proc readData(filename: string): seq[Path] =
-  for line in lines(filename):
-    result.add parsePath(line)
+proc parseData: Data =
+  readInput().strip.splitLines.map(parsePath)
 
 
 proc buildMap(list: seq[Path]): Map =
@@ -54,10 +57,8 @@ proc simulate(map: Map, days: int): Map =
         if cnt == 2: result.incl(hex)
 
 
-proc partOne(list: seq[Path]): int = list.buildMap.card
-proc partTwo(list: seq[Path]): int = list.buildMap.simulate(100).card
+let data = parseData()
 
-
-let list = readData("inputs/24.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.buildMap.card
+  echo data.buildMap.simulate(100).card

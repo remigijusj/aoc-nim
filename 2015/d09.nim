@@ -18,7 +18,7 @@ func parseEdge(line: string): Edge =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseEdge)
+  readInput().strip.splitLines.map(parseEdge)
 
 
 func adjacencyMatrix(data: Data): Matrix =

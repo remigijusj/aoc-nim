@@ -1,7 +1,7 @@
 # Advent of Code 2022 - Day 8
 
 import std/[strutils,sequtils]
-import iterrr
+import ../utils/common
 
 type
   Dir = tuple[view: int, blocked: bool]
@@ -16,7 +16,7 @@ func parseLine(line: string): seq[int] =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseLine)
+  readInput().strip.splitLines.map(parseLine)
 
 
 template `<-`(dir, pval) =
@@ -41,13 +41,24 @@ iterator trees(grid: Data): Tree =
 
 func visible(tree: Tree): bool = tree.anyIt(not it.blocked)
 
-func scenicScore(tree: Tree): int = tree.mapIt(it.view).foldl(a * b)
+func scenicScore(tree: Tree): int = tree.mapIt(it.view).prod
+
+
+func countVisibleTrees(data: Data): int =
+  for tree in data.trees:
+    if tree.visible:
+      result.inc
+
+
+func maxScenicScore(data: Data): int =
+  for tree in data.trees:
+    let score = tree.scenicScore
+    if score > result:
+      result = score
 
 
 let data = parseData()
 
-let part1 = data.trees |> filter(it.visible).count()
-let part2 = data.trees |> map(it.scenicScore).max()
-
-echo part1
-echo part2
+benchmark:
+  echo data.countVisibleTrees
+  echo data.maxScenicScore

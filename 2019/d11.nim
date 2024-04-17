@@ -1,7 +1,8 @@
 # Advent of Code 2019 - Day 11
 
-import std/[strutils, sequtils, tables], intcode
+import std/[strutils, sequtils, tables]
 from math import euclMod
+import intcode
 import ../utils/common
 
 type
@@ -17,8 +18,8 @@ var move: array[4, Panel] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 proc `+`(a, b: Panel): Panel = (a.x + b.x, a.y + b.y)
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc paintPanels(data: Data, start: int): Grid =
@@ -54,9 +55,8 @@ proc display(grid: Grid): string =
     result &= "\n"
 
 
-proc partOne(data: Data): int = data.paintPanels(0).len
-proc partTwo(data: Data): string = data.paintPanels(1).display
+let data = parseData()
 
-let data = parseData("inputs/11.txt")
-echo partOne(data)
-echo partTwo(data).decodeBF6
+benchmark:
+  echo data.paintPanels(0).len
+  echo data.paintPanels(1).display.decodeBF6

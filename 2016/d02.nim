@@ -12,7 +12,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 converter toKeypad(rep: string): Keypad =

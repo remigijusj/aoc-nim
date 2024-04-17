@@ -1,10 +1,13 @@
 # Advent of code 2020 - Day 18
 
-import strutils, sequtils, nre
+import std/[strutils, sequtils, nre]
+import ../utils/common
 
-proc readLines(filename: string): seq[string] =
-  for line in lines(filename):
-    result.add line
+type Data = seq[string]
+
+
+proc parseData: Data =
+  readInput().strip.splitLines
 
 
 proc evalNested(expr: string, eval: proc(expr: string): int): int =
@@ -29,10 +32,8 @@ proc evalInvert(expr: string): int =
   evalOps(expr)
 
 
-proc partOne(list: seq[string]): int = list.mapIt(it.evalNested(evalOps)).foldl(a + b)
-proc partTwo(list: seq[string]): int = list.mapIt(it.evalNested(evalInvert)).foldl(a + b)
+let data = parseData()
 
-
-let list = readLines("inputs/18.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.mapIt(it.evalNested(evalOps)).sum
+  echo data.mapIt(it.evalNested(evalInvert)).sum

@@ -1,16 +1,20 @@
 # Advent of Code 2019 - Day 24
 
-import std/[sets,sequtils]
+import std/[sets,sequtils,strutils]
+import ../utils/common
 
-type Pos = tuple[x, y, z: int]
+type
+  Pos = tuple[x, y, z: int]
 
-type Data = HashSet[Pos]
+  Data = HashSet[Pos]
+
 
 func `+`(a, b: Pos): Pos = (a.x + b.x, a.y + b.y, a.z + b.z)
 
 
-proc parseData(filename: string): Data =
-  for row, line in lines(filename).toSeq:
+proc parseData: Data =
+  let lines = readInput().strip.splitLines
+  for row, line in lines:
     for col, ch in line:
       if ch == '#':
         result.incl (col, row, 0)
@@ -87,9 +91,8 @@ proc biodiversity(data: Data): int =
       result = result or (1 shl idx)
 
 
-proc partOne(data: Data): int = data.runUntilRepeat.biodiversity
-proc partTwo(data: Data): int = data.runRecursive(200).card
+let data = parseData()
 
-let data = parseData("inputs/24.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.runUntilRepeat.biodiversity
+  echo data.runRecursive(200).card

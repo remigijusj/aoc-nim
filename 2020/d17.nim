@@ -1,16 +1,19 @@
 # Advent of code 2020 - Day 17
 
-import sequtils, tables
+import std/[strutils, sequtils, tables]
 from math import `^`
+import ../utils/common
 
-type Dim[N: static[int]] = array[N, int8]
+type
+  Dim[N: static[int]] = array[N, int8]
 
-type Pocket[N: static[int]] = Table[Dim[N], bool]
+  Pocket[N: static[int]] = Table[Dim[N], bool]
 
-type Data = seq[(int8, int8)]
+  Data = seq[(int8, int8)]
 
-proc readData(filename: string): Data =
-  let lines = lines(filename).toSeq
+
+proc parseData: Data =
+  let lines = readInput().strip.splitLines
   for y, line in pairs(lines):
     for x, ch in pairs(line):
       if ch == '#': result.add (x.int8, y.int8)
@@ -53,10 +56,8 @@ proc simulate[N: static[int]](data: Data, gens: int): Pocket[N] =
         if cnt == 3: result[v] = true
 
 
-proc partOne(data: Data): int = simulate[3](data, 6).len
-proc partTwo(data: Data): int = simulate[4](data, 6).len
+let data = parseData()
 
-
-let data = readData("inputs/17.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo simulate[3](data, 6).len
+  echo simulate[4](data, 6).len

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 22
 
 import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type
   Op = object
@@ -24,7 +25,7 @@ func parseOp(t: tuple[token: string, isSep: bool]): Op =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip(leading=false).split("\n\n")
+  let parts = readInput().strip(leading=false).split("\n\n")
   result.grid = parts[0].splitLines
   for token in parts[1].tokenize({'L','R'}):
     result.path.add token.parseOp
@@ -128,5 +129,6 @@ func password(s: State): int =
 
 let data = parseData()
 
-echo data.tracePath(move2d).password
-echo data.tracePath(move3d).password
+benchmark:
+  echo data.tracePath(move2d).password
+  echo data.tracePath(move3d).password

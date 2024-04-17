@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 18
 
 import std/[strscans,strutils,sequtils,sets,options]
+import ../utils/common
 
 type
   Cube = array[3, int]
@@ -12,7 +13,7 @@ func parseCube(line: string): Cube =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseCube).toHashSet
+  readInput().strip.splitLines.map(parseCube).toHashSet
 
 
 iterator adjacent(cube: Cube): Cube =
@@ -56,8 +57,6 @@ func surfaceArea(data: Data, exterior = none(Data)): int =
 
 let data = parseData()
 
-let part1 = data.surfaceArea
-let part2 = data.surfaceArea(data.exterior.some)
-
-echo part1
-echo part2
+benchmark:
+  echo data.surfaceArea
+  echo data.surfaceArea(data.exterior.some)

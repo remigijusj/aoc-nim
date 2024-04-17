@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 13
 
 import std/[strutils,sequtils,algorithm]
+import ../utils/common
 
 type
   XY = tuple[x, y: int]
@@ -23,7 +24,7 @@ func `$`(p: XY): string = $p.x & "," & $p.y
 
 
 proc parseData: Data =
-  result.grid = readAll(stdin).strip(chars = {'\n'}).splitLines
+  result.grid = readInput().strip(chars = {'\n'}).splitLines
   for y, line in result.grid.mpairs:
     for x, c in line.mpairs:
       let dir = "^>v<".find(c)
@@ -103,5 +104,6 @@ proc lastRemaining(data: Data): XY =
 
 let data = parseData()
 
-echo data.firstCollission
-echo data.lastRemaining
+benchmark:
+  echo data.firstCollission
+  echo data.lastRemaining

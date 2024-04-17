@@ -2,16 +2,19 @@
 
 import std/[strutils, sequtils, complex, tables, algorithm]
 from math import PI
+import ../utils/common
 
-type Point = Complex32
+type
+  Point = Complex32
 
-type Data = seq[Point]
+  Data = seq[Point]
+
 
 proc nearer(a, o, b: Point): bool = (a - o).abs < (b - o).abs
 
 
-proc parseData(filename: string): Data =
-  let lines = readFile(filename).split("\n")
+proc parseData: Data =
+  let lines = readInput().strip.split("\n")
   for y, line in lines:
     for x, ch in line:
       if ch == '#':
@@ -48,7 +51,9 @@ proc partTwo(data: Data, origin: Point): int =
   result = point.re.int * 100 + point.im.int
 
 
-let data = parseData("inputs/10.txt")
-let (origin, count) = partOne(data)
-echo count
-echo partTwo(data, origin)
+let data = parseData()
+
+benchmark:
+  let (origin, count) = data.partOne
+  echo count
+  echo data.partTwo(origin)

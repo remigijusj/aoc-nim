@@ -1,13 +1,14 @@
 # Advent of Code 2021 - Day 11
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 const Deltas = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
 
 type Data = array[100, int]
 
-proc parseData(filename: string): Data =
-  for i, c in readFile(filename).replace("\n", ""):
+proc parseData: Data =
+  for i, c in readInput().replace("\n", ""):
     result[i] = c.ord - '0'.ord
 
 
@@ -47,10 +48,8 @@ proc findSimultaneousFlash(data: Data): int =
       return step
 
 
-proc partOne(data: Data): int = data.countFlashes(100)
-proc partTwo(data: Data): int = data.findSimultaneousFlash
+let data = parseData()
 
-
-let data = parseData("inputs/11.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.countFlashes(100)
+  echo data.findSimultaneousFlash

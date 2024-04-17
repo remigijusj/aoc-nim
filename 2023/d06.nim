@@ -11,7 +11,7 @@ type
 
 
 proc parseData: Data =
-  var lines = readAll(stdin).strip.splitLines
+  var lines = readInput().strip.splitLines
   let time = lines[0][5..^1].strip.splitWhitespace.map(parseInt)
   let dist = lines[1][9..^1].strip.splitWhitespace.map(parseInt)
   result = zip(time, dist)

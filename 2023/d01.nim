@@ -9,7 +9,7 @@ const numbers = ["zero","one","two","three","four","five","six","seven","eight",
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 proc fetchDigits(line: string, words: bool): seq[int] =

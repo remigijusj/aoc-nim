@@ -2,6 +2,7 @@
 
 import std/[strutils, tables]
 import memo
+import ../utils/common
 
 type
   Data = array[2, int]
@@ -9,8 +10,8 @@ type
   Score = array[2, int]
 
 
-proc parseData(filename: string): Data =
-  let lines = readFile(filename).split("\n")
+proc parseData: Data =
+  let lines = readInput().split("\n")
   result[0] = lines[0][28..28].parseInt
   result[1] = lines[1][28..28].parseInt
 
@@ -48,10 +49,8 @@ proc playDirac(data: Data, limit: int): int =
   return max(total[0], total[1])
 
 
-proc partOne(data: Data): int = data.playSimple(1000)
-proc partTwo(data: Data): int = data.playDirac(21)
+let data = parseData()
 
-
-let data = parseData("inputs/21.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.playSimple(1000)
+  echo data.playDirac(21)

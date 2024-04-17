@@ -10,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   for y, line in lines:
     for x, c in line:
       if c == '#':

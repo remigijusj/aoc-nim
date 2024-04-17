@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 2
 
-import std/[strutils,sequtils,math]
+import std/[strutils,sequtils]
+import ../utils/common
 
 type
   Round = tuple[a, x: int]
@@ -13,7 +14,7 @@ proc parseRound(line: string): Round =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseRound)
+  readInput().strip.splitLines.map(parseRound)
 
 
 func score(choose, outcome: int): int =
@@ -22,8 +23,6 @@ func score(choose, outcome: int): int =
 
 let data = parseData()
 
-let part1 = data.mapIt(score(it.x, (it.x - it.a + 4) mod 3)).sum
-let part2 = data.mapIt(score((it.a + it.x + 2) mod 3, it.x)).sum
-
-echo part1
-echo part2
+benchmark:
+  echo data.mapIt(score(it.x, (it.x - it.a + 4) mod 3)).sum
+  echo data.mapIt(score((it.a + it.x + 2) mod 3, it.x)).sum

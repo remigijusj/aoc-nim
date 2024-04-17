@@ -1,11 +1,13 @@
 # Advent of Code 2022 - Day 20
 
-import std/[strutils,sequtils,algorithm,math]
+import std/[strutils,sequtils,algorithm]
+from math import euclMod
+import ../utils/common
 
 type Data = seq[int]
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInt)
+  readInput().strip.splitLines.map(parseInt)
 
 
 func mixing(data: Data, num = 1): Data =
@@ -31,8 +33,6 @@ func coordinates(data: Data): int =
 
 let data = parseData()
 
-let part1 = data.mixing.coordinates
-let part2 = data.mapIt(it * 811589153).mixing(10).coordinates
-
-echo part1
-echo part2
+benchmark:
+  echo data.mixing.coordinates
+  echo data.mapIt(it * 811589153).mixing(10).coordinates

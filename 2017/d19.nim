@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 19
 
 import std/[strutils]
+import ../utils/common
 
 type
   Data = seq[string]
@@ -12,7 +13,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).splitLines
+  readInput().splitLines
 
 
 func followPath(data: Data): tuple[seen: string, step: int] =
@@ -52,7 +53,8 @@ func followPath(data: Data): tuple[seen: string, step: int] =
 
 
 let data = parseData()
-let path = data.followPath
 
-echo path.seen
-echo path.step
+benchmark:
+  let path = data.followPath
+  echo path.seen
+  echo path.step

@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 12
 
 import std/[strutils,deques,sets]
+import ../utils/common
 
 type Data = object
   rw, start, finish: int
@@ -8,7 +9,7 @@ type Data = object
 
 
 proc parseData: Data =
-  let data = readAll(stdin)
+  let data = readInput()
   result.rw = data.find('\n')
   result.grid = data.replace("\n", "")
   result.start = result.grid.find('S')
@@ -47,8 +48,6 @@ func shortestPath(data: Data, start = true): int =
 
 let data = parseData()
 
-let part1 = data.shortestPath
-let part2 = data.shortestPath(false)
-
-echo part1
-echo part2
+benchmark:
+  echo data.shortestPath
+  echo data.shortestPath(false)

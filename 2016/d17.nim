@@ -19,7 +19,7 @@ const
 
 
 proc parseData: string =
-  readAll(stdin).strip
+  readInput().strip
 
 
 iterator neighbors(data: string, here: XY, path: string): tuple[next: XY, move: char] =

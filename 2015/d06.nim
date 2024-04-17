@@ -27,7 +27,7 @@ func parseInstruction(line: string): Instruction =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 func run1(data: Data): Grid =

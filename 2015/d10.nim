@@ -6,7 +6,7 @@ import ../utils/common
 
 
 proc parseData: string =
-  readAll(stdin).strip
+  readInput().strip
 
 
 func lookAndSay(data: string): string =

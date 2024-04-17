@@ -39,7 +39,7 @@ func parseRule(line: string): Rule =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseRule)
+  readInput().strip.splitLines.map(parseRule)
 
 
 func scramble(data: Data, origin: string): string =

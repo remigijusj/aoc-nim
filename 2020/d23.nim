@@ -1,14 +1,18 @@
 # Advent of code 2020 - Day 23
 
-import sequtils
+import std/sequtils
+import ../utils/common
 
-type Game = object
-  head: int
-  list: seq[int]
+type
+  Game = object
+    head: int
+    list: seq[int]
+
+  Data = seq[int]
 
 
-proc readData(filename: string): seq[int] =
-  result = readFile(filename).toSeq.mapIt(it.ord - '0'.ord)
+proc parseData: Data =
+  result = readInput().toSeq.mapIt(it.ord - '0'.ord)
 
 
 proc nextValue(size: int, values: varargs[int]): int {.inline.} =
@@ -69,10 +73,8 @@ proc nextPairProd(game: Game, head: int): int =
   result = v1 * v2
 
 
-proc partOne(list: seq[int]): string = list.initGame.play(100).serializeFrom(1)
-proc partTwo(list: seq[int]): int = list.initGame(1_000_000).play(10_000_000).nextPairProd(1)
+let data = parseData()
 
-
-let list = readData("inputs/23.txt")
-echo partOne(list)
-echo partTwo(list)
+benchmark:
+  echo data.initGame.play(100).serializeFrom(1)
+  echo data.initGame(1_000_000).play(10_000_000).nextPairProd(1)

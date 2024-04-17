@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 22
 
 import std/[strutils,strscans,heapqueue,tables]
+import ../utils/common
 
 type
   Data = object
@@ -19,7 +20,7 @@ type
 
 
 proc parseData: Data =
-  let text = readAll(stdin).strip
+  let text = readInput().strip
   assert text.scanf("depth: $i\ntarget: $i,$i", result.depth, result.target[0], result.target[1])
 
 
@@ -91,7 +92,9 @@ func fastestWay(data: Data, area: Area): int =
 
 
 let data = parseData()
-let area = data.buildArea
 
-echo data.totalRiskLevel(area)
-echo data.fastestWay(area)
+benchmark:
+  let area = data.buildArea
+
+  echo data.totalRiskLevel(area)
+  echo data.fastestWay(area)

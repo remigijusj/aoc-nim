@@ -1,12 +1,13 @@
 # Advent of Code 2019 - Day 6
 
 import std/[strutils,tables,sets]
+import ../utils/common
 
 type Data = Table[string,string]
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     let parts = line.split(')')
     result[parts[1]] = parts[0]
 
@@ -25,17 +26,19 @@ proc ancestorsSet(data: Data, node: string): HashSet[string] =
     result.incl(node)
 
 
-proc partOne(data: Data): int =
+proc countOrbits(data: Data): int =
   for node in data.keys:
     result += data.ancestorsCount(node)
 
 
-proc partTwo(data: Data): int =
+proc minTransfers(data: Data): int =
   let you = data.ancestorsSet("YOU")
   let san = data.ancestorsSet("SAN")
   result = (you -+- san).card
 
 
-let data = parseData("inputs/06.txt")
-echo partOne(data)
-echo partTwo(data)
+let data = parseData()
+
+benchmark:
+  echo data.countOrbits
+  echo data.minTransfers

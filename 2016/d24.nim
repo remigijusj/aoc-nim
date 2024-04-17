@@ -20,7 +20,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func findNumbers(data: Data): Nums =

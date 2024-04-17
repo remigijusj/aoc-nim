@@ -1,7 +1,8 @@
 # Advent of code 2020 - Day 20
 
-import sequtils, strutils, tables, algorithm
+import std/[sequtils, strutils, tables, algorithm]
 from math import euclMod
+import ../utils/common
 
 const MONSTER = """
 ..................#.
@@ -9,15 +10,16 @@ const MONSTER = """
 .#..#..#..#..#..#...
 """.splitWhitespace
 
-type Tile = seq[string]
+type
+  Tile = seq[string]
 
-type GridItem = tuple[num: int, tile: Tile]
+  GridItem = tuple[num: int, tile: Tile]
 
-type Grid = array[12, array[12, GridItem]]
+  Grid = array[12, array[12, GridItem]]
 
-type Data = object
-  tiles: Table[int, Tile]
-  edges: Table[string, seq[int]]
+  Data = object
+    tiles: Table[int, Tile]
+    edges: Table[string, seq[int]]
 
 
 proc norm(source: string): string =
@@ -40,8 +42,8 @@ proc buildEdges(data: var Data) =
       data.edges[edge].add(num)
 
 
-proc readData(filename: string): Data =
-  for part in readFile(filename).split("\n\n"):
+proc parseData: Data =
+  for part in readInput().split("\n\n"):
     let lines = part.splitLines
     if lines[0].startsWith("Tile"):
       let num = parseInt(lines[0][5..^2])
@@ -86,7 +88,7 @@ proc adjacent(tile: Tile, edge: string): array[2, string] =
   [edges[euclMod(i-1, 4)], edges[euclMod(i+1, 4)]]
 
 
-proc matchTile(data: Data, left, top: GridItem = (0, @[])): GridItem =
+proc matchTile(data: Data, left: GridItem = (0, @[]), top: GridItem = (0, @[])): GridItem =
   if left.num > 0 and top.num > 0:
     result.num = data.edges[left.tile.edges[2]].filterIt(it != left.num)[0]
     let tile = data.tiles[result.num]
@@ -148,10 +150,8 @@ proc waterRoughness(data: Data): int =
   map.join.count('#') - map.countMonsters * MONSTER.join.count('#')
 
 
-proc partOne(data: Data): int = data.findCorners.foldl(a * b)
-proc partTwo(data: Data): int = data.waterRoughness
+var data = parseData()
 
-
-var data = readData("inputs/20.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.findCorners.prod
+  echo data.waterRoughness

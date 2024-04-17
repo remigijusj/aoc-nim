@@ -2,12 +2,13 @@
 
 import std/[strutils,sequtils]
 import intcode
+import ../utils/common
 
 type Data = seq[int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").map(parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").map(parseInt)
 
 
 proc interactiveLoop(data: Data) =
@@ -20,5 +21,7 @@ proc interactiveLoop(data: Data) =
     input = stdin.readLine & "\n"
 
 
-let data = parseData("inputs/25.txt")
-data.interactiveLoop
+let data = parseData()
+
+benchmark:
+  data.interactiveLoop

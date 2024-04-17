@@ -1,6 +1,7 @@
 # Advent of Code 2018 - Day 24
 
 import std/[strscans,strutils,sequtils,algorithm]
+import ../utils/common
 
 type
   Kind = enum
@@ -36,7 +37,7 @@ func parseGroup(line: string, kind: Kind): Group =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n")
+  let parts = readInput().strip.split("\n\n")
   result &= parts[0].splitLines[1..^1].mapIt(it.parseGroup(immuneSys))
   result &= parts[1].splitLines[1..^1].mapIt(it.parseGroup(infection))
   for i in 0..<result.len:
@@ -138,5 +139,6 @@ func binarySearch(data: Data): int =
 
 let data = parseData()
 
-echo data.winningUnits.max
-echo data.binarySearch
+benchmark:
+  echo data.winningUnits.max
+  echo data.binarySearch

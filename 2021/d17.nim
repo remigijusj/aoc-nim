@@ -1,14 +1,15 @@
 # Advent of Code 2021 - Day 17
 
 import std/[strscans, math, sets]
+import ../utils/common
 
 type Data = object
   xmin, xmax: int
   ymin, ymax: int
 
 
-proc parseData(filename: string): Data =
-  let data = readfile(filename)
+proc parseData: Data =
+  let data = readInput()
   discard data.scanf("target area: x=$i..$i, y=$i..$i", result.xmin, result.xmax, result.ymin, result.ymax)
 
 
@@ -32,9 +33,8 @@ proc shots(data: Data): HashSet[(int,int)] =
         result.incl (x,y)
 
 
-proc partOne(data: Data): int = triangular(data.ymin.abs - 1)
-proc partTwo(data: Data): int = data.shots.card
+let data = parseData()
 
-let data = parseData("inputs/17.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo triangular(data.ymin.abs - 1)
+  echo data.shots.card

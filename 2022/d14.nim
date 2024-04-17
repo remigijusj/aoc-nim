@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 14
 
 import std/[strutils,strscans,sequtils,sets]
+import ../utils/common
 
 type
   XY = tuple[x, y: int]
@@ -15,7 +16,7 @@ func parseXY(s: string): XY = discard s.scanf("$i,$i", result.x, result.y)
 
 func parseLine(line: string): Path = line.split(" -> ").map(parseXY)
 
-proc parseData: Data = readAll(stdin).strip.splitLines.map(parseLine)
+proc parseData: Data = readInput().strip.splitLines.map(parseLine)
 
 
 func buildGrid(data: Data): Grid =
@@ -71,8 +72,6 @@ func fillSand(grid: Grid, floor: bool): int =
 let data = parseData()
 let grid = data.buildGrid
 
-let part1 = grid.fillSand(false)
-let part2 = grid.fillSand(true)
-
-echo part1
-echo part2
+benchmark:
+  echo grid.fillSand(false)
+  echo grid.fillSand(true)

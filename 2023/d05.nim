@@ -26,7 +26,7 @@ func parseMap(blob: string): Map =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n")
+  let parts = readInput().strip.split("\n\n")
   result.seeds = parts[0][7..^1].split(" ").map(parseInt)
   result.maps = parts[1..^1].map(parseMap)
 

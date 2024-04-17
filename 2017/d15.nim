@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 15
 
 import std/strscans
+import ../utils/common
 
 type
   Data = tuple[A, B: int]
@@ -10,7 +11,7 @@ const
   Period = 2147483647
 
 proc parseData: Data =
-  let text = readAll(stdin)
+  let text = readInput()
   assert text.scanf("Generator A starts with $i\nGenerator B starts with $i\n", result.A, result.B)
 
 
@@ -37,5 +38,6 @@ proc countMatches(data, mult, cond: Data, rounds: int): int =
 
 let data = parseData()
 
-echo countMatches(data, Mult, (1, 1), 40_000_000)
-echo countMatches(data, Mult, (4, 8), 5_000_000)
+benchmark:
+  echo countMatches(data, Mult, (1, 1), 40_000_000)
+  echo countMatches(data, Mult, (4, 8), 5_000_000)

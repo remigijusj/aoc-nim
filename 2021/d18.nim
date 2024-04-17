@@ -3,6 +3,7 @@
 import std/[strutils, sequtils]
 # https://github.com/zevv/npeg
 import npeg
+import ../utils/common
 
 type
   Tree = ref object
@@ -29,8 +30,8 @@ proc parseTree(line: string): Tree =
   assert treeParser.match(line, result).ok
 
 
-proc parseData(filename: string): seq[Tree] =
-  for line in lines(filename):
+proc parseData: seq[Tree] =
+  for line in readInput().strip.splitLines:
     result.add line.parseTree
 
 
@@ -129,10 +130,8 @@ proc pairSums(data: seq[Tree]): seq[Tree] =
         result.add(one + two)
 
 
-proc partOne(data: seq[Tree]): int = data.foldl(a + b).magnitude
-proc partTwo(data: seq[Tree]): int = data.pairSums.map(magnitude).max
+let data = parseData()
 
-
-let data = parseData("inputs/18.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.sum.magnitude
+  echo data.pairSums.map(magnitude).max

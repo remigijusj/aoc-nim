@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 25
 
 import std/[strscans,strutils,sequtils,tables]
+import ../utils/common
 
 const size = 20_000 # heuristics
 
@@ -39,7 +40,7 @@ func parsePart(part: string): (State, Action, Action) =
 
 
 proc parseData: Data =
-  let parts = readAll(stdin).strip.split("\n\n")
+  let parts = readInput().strip.split("\n\n")
   assert parts[0].scanf("Begin in state $c.\nPerform a diagnostic checksum after $i steps.", result.begin, result.steps)
   for part in parts[1..^1]:
     let (this, act0, act1) = part.parsePart
@@ -61,4 +62,5 @@ func runTuringMachine(data: Data): seq[int] =
 
 let data = parseData()
 
-echo data.runTuringMachine.count(1)
+benchmark:
+  echo data.runTuringMachine.count(1)

@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 16
 
 import std/[strscans,strutils,algorithm]
+import ../utils/common
 
 type
   Data = seq[string]
@@ -10,7 +11,7 @@ const
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split(",")
+  readInput().strip.split(",")
 
 
 func runMoves(chars: var string, data: Data) =
@@ -48,5 +49,6 @@ func runRepeat(data: Data, count: int): string =
 
 let data = parseData()
 
-echo data.runRepeat(1)
-echo data.runRepeat(1_000_000_000)
+benchmark:
+  echo data.runRepeat(1)
+  echo data.runRepeat(1_000_000_000)

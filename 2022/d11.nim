@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 11
 
 import std/[strutils,strscans,sequtils,algorithm]
+import ../utils/common
 
 type
   Op = enum
@@ -34,14 +35,14 @@ func parseMonkey(chunk: string): Monkey =
 
 
 proc parseData: Data =
-  for chunk in readAll(stdin).strip.split("\n\n"):
+  for chunk in readInput().strip.split("\n\n"):
     result.add chunk.parseMonkey
 
 
 proc monkeyBusiness(data: Data, rounds: int, reduce = false): int =
   var data = data
   var activity = newSeq[int](data.len)
-  let factor = data.mapIt(it.test).foldl(a * b)
+  let factor = data.mapIt(it.test).prod
 
   for round in 1..rounds:
     for turn, monkey in data.mpairs:
@@ -69,8 +70,6 @@ proc monkeyBusiness(data: Data, rounds: int, reduce = false): int =
 
 let data = parseData()
 
-let part1 = data.monkeyBusiness(20, true)
-let part2 = data.monkeyBusiness(10000)
-
-echo part1
-echo part2
+benchmark:
+  echo data.monkeyBusiness(20, true)
+  echo data.monkeyBusiness(10000)

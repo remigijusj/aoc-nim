@@ -18,7 +18,7 @@ func parseIngredient(line: string): Ingredient =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseIngredient)
+  readInput().strip.splitLines.map(parseIngredient)
 
 
 func findNonzero(comb: seq[int]): int {.inline.} =

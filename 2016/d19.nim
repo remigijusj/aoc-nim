@@ -4,7 +4,7 @@ import std/[strutils]
 import ../utils/common
 
 proc parseData: int =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 func findLast1(n: int): int =

@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 24
 
 import std/[strutils, sequtils]
+import ../utils/common
 
 type
   Triplet = seq[int]
@@ -12,8 +13,8 @@ proc parseTriplet(lines: seq[string]): Triplet =
   [4, 5, 15].mapIt(lines[it].split(" ")[^1].parseInt)
 
 
-proc parseData(filename: string): Data =
-  lines(filename).toSeq.distribute(14).map(parseTriplet)
+proc parseData: Data =
+  readInput().strip.splitLines.distribute(14).map(parseTriplet)
 
 
 proc validRanges(data: Data): array[14, tuple[min, max: int]] =
@@ -35,10 +36,8 @@ proc validRanges(data: Data): array[14, tuple[min, max: int]] =
       result[j] = (1 - sum, 9)
 
 
-proc partOne(data: Data): string = data.validRanges.mapIt(it.max).join
-proc partTwo(data: Data): string = data.validRanges.mapIt(it.min).join
+let data = parseData()
 
-
-let data = parseData("inputs/24.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.validRanges.mapIt(it.max).join
+  echo data.validRanges.mapIt(it.min).join

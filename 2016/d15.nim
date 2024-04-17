@@ -16,7 +16,7 @@ func parseConfig(line: string): Config =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseConfig)
+  readInput().strip.splitLines.map(parseConfig)
 
 
 proc modInv(a0, b0: int): int =

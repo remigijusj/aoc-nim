@@ -32,7 +32,7 @@ func parseStone(line: string): Stone =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseStone)
+  readInput().strip.splitLines.map(parseStone)
 
 
 func pathsWillIntersect(a, b: Stone): bool =

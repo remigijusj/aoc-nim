@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 21
 
 import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type
   Data = seq[(string, string)]
@@ -23,7 +24,7 @@ func parseRule(line: string): (string, string) =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseRule)
+  readInput().strip.splitLines.map(parseRule)
 
 
 proc change(line: var string, perm: seq[int]) =
@@ -78,7 +79,9 @@ func repeatEnhancement(rules: Rules, steps: int): Image =
 
 
 let data = parseData()
-let rules = data.buildRules
 
-echo rules.repeatEnhancement(5).data.count('#')
-echo rules.repeatEnhancement(18).data.count('#')
+benchmark:
+  let rules = data.buildRules
+
+  echo rules.repeatEnhancement(5).data.count('#')
+  echo rules.repeatEnhancement(18).data.count('#')

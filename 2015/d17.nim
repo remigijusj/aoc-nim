@@ -7,7 +7,7 @@ type Data = seq[int]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInt)
+  readInput().strip.splitLines.map(parseInt)
 
 
 iterator combinations(data: Data, size, this, used: int): int {.closure.} =

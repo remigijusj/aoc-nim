@@ -1,12 +1,13 @@
 # Advent of Code 2018 - Day 2
 
-import std/[strutils,sequtils,tables,sugar]
+import std/[strutils,sequtils,tables]
+import ../utils/common
 
 type Data = seq[string]
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func countChars(line: string): CountTable[char] =
@@ -47,5 +48,6 @@ func findCorrectPair(data: Data): string =
 
 let data = parseData()
 
-echo data.calcChecksum
-echo data.findCorrectPair
+benchmark:
+  echo data.calcChecksum
+  echo data.findCorrectPair

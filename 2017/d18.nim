@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 18
 
 import std/[strutils]
+import ../utils/common
 
 type
   RegVal = object
@@ -33,7 +34,7 @@ proc parseRegVal(line: string, regs: var seq[char]): RegVal =
 
 proc parseData: Data =
   var i: Instruction
-  for line in readAll(stdin).strip.splitLines:
+  for line in readInput().strip.splitLines:
     let parts = line.split(" ")
     i.op = parts[0]
     i.a = parts[1].parseRegVal(result.regs)
@@ -132,5 +133,6 @@ func run2(data: Data): int =
 
 let data = parseData()
 
-echo data.run1
-echo data.run2
+benchmark:
+  echo data.run1
+  echo data.run2

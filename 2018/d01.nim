@@ -1,11 +1,12 @@
 # Advent of Code 2018 - Day 1
 
-import std/[strutils,sequtils,sugar,sets]
+import std/[strutils,sequtils,sets]
+import ../utils/common
 
 type Data = seq[int]
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.mapIt(it.parseInt)
+  readInput().strip.splitLines.mapIt(it.parseInt)
 
 
 func sumSeenTwice(data: Data): int =
@@ -21,8 +22,6 @@ func sumSeenTwice(data: Data): int =
 
 let data = parseData()
 
-let part1 = data.foldl(a + b)
-let part2 = data.sumSeenTwice
-
-echo part1
-echo part2
+benchmark:
+  echo data.sum
+  echo data.sumSeenTwice

@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 11
 
 import std/[strutils,sequtils]
+import ../utils/common
 
 type
   Hex = tuple[q, r, s: int]
@@ -16,7 +17,7 @@ func distance(hex: Hex): int =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split(",").map(parseEnum[Dir])
+  readInput().strip.split(",").map(parseEnum[Dir])
 
 
 proc move(hex: var Hex, dir: Dir) =
@@ -46,5 +47,6 @@ func pathMax(data: Data): int =
 
 let data = parseData()
 
-echo data.pathLast
-echo data.pathMax
+benchmark:
+  echo data.pathLast
+  echo data.pathMax

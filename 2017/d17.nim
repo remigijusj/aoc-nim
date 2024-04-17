@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 17
 
 import std/[strutils,lists]
+import ../utils/common
 
 type
   Data = int
@@ -9,7 +10,7 @@ type
 
 
 proc parseData: Data =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 proc move(ring: var Ring, step: int) =
@@ -39,5 +40,6 @@ func simulateBuffer(step: int, last: int): int =
 
 let data = parseData()
 
-echo spinBuffer(data, 2017).head.next.value
-echo simulateBuffer(data, 50_000_000)
+benchmark:
+  echo spinBuffer(data, 2017).head.next.value
+  echo simulateBuffer(data, 50_000_000)

@@ -10,7 +10,7 @@ type Data = tuple
 
 
 proc parseData: Data =
-  let lines = readAll(stdin).strip.splitLines
+  let lines = readInput().strip.splitLines
   result.moves = lines[0].mapIt("LR".find(it))
   for line in lines[2..^1]:
     result.nodes[line[0..2]] = [line[7..9], line[12..14]]

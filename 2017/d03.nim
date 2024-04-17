@@ -1,6 +1,7 @@
 # Advent of Code 2017 - Day 3
 
 import std/[strutils,tables,math]
+import ../utils/common
 
 type
   Point = tuple[x, y: int]
@@ -19,7 +20,7 @@ func level(p: Point): int = max(p.x.abs, p.y.abs)
 
 
 proc parseData: Data =
-  readAll(stdin).strip.parseInt
+  readInput().strip.parseInt
 
 
 func next(pnt: Point): Dir =
@@ -73,5 +74,6 @@ func fillSummed(data: Data): int =
 
 let data = parseData()
 
-echo data.normOfPoint
-echo data.fillSummed
+benchmark:
+  echo data.normOfPoint
+  echo data.fillSummed

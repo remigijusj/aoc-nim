@@ -1,6 +1,7 @@
 # Advent of Code 2021 - Day 6
 
 import std/[strutils, sequtils, algorithm]
+import ../utils/common
 
 type
   Data = seq[int]
@@ -8,8 +9,8 @@ type
   Distrib = array[9, int]
 
 
-proc parseData(filename: string): Data =
-  readFile(filename).strip.split(",").mapIt(it.parseInt)
+proc parseData: Data =
+  readInput().strip.split(",").mapIt(it.parseInt)
 
 
 proc tally(list: Data): Distrib =
@@ -24,10 +25,8 @@ proc simulateFish(data: Data, days: int): Distrib =
     result[6] += result[8]
 
 
-proc partOne(data: Data): int = data.simulateFish(80).foldl(a + b)
-proc partTwo(data: Data): int = data.simulateFish(256).foldl(a + b)
+let data = parseData()
 
-
-let data = parseData("inputs/06.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.simulateFish(80).sum
+  echo data.simulateFish(256).sum

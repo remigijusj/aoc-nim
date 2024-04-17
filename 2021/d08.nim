@@ -1,9 +1,10 @@
 # Advent of Code 2021 - Day 8
 
-import std/[strutils, sequtils, setutils]
+import std/[strutils, sequtils, packedsets]
+import ../utils/common
 
 type
-  Word = set[char]
+  Word = PackedSet[char]
 
   Display = object
     digits: seq[Word]
@@ -11,14 +12,15 @@ type
 
   Data = seq[Display]
 
+
 proc parseDisplay(line: string): Display =
   let parts = line.split(" | ")
-  result.digits = parts[0].split(" ").mapIt(it.toSet)
-  result.four = parts[1].split(" ").mapIt(it.toSet)
+  result.digits = parts[0].split(" ").mapIt(it.toPackedSet)
+  result.four = parts[1].split(" ").mapIt(it.toPackedSet)
 
 
-proc parseData(filename: string): Data =
-  for line in lines(filename):
+proc parseData: Data =
+  for line in readInput().strip.splitLines:
     result.add line.parseDisplay
 
 
@@ -60,10 +62,8 @@ proc decodeFour(display: Display): int =
     result = result * 10 + digit
 
 
-proc partOne(data: Data): int = data.countEasyWords
-proc partTwo(data: Data): int = data.mapIt(it.decodeFour).foldl(a + b)
+let data = parseData()
 
-
-let data = parseData("inputs/08.txt")
-echo partOne(data)
-echo partTwo(data)
+benchmark:
+  echo data.countEasyWords
+  echo data.mapIt(it.decodeFour).sum

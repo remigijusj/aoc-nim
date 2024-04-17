@@ -9,7 +9,7 @@ const vowels = {'a','e','i','o','u'}
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines
+  readInput().strip.splitLines
 
 
 func nice1(line: string): bool =

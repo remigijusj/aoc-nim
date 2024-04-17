@@ -1,6 +1,7 @@
 # Advent of Code 2022 - Day 17
 
 import std/[strutils,sequtils,bitops]
+import ../utils/common
 
 type
   Data = string
@@ -31,7 +32,7 @@ var rocks = [
 ]
 
 proc parseData: Data =
-  readAll(stdin).strip
+  readInput().strip
 
 
 proc push(rock: var Rows, dir: char, height: int, tower: Rows) =
@@ -110,5 +111,6 @@ proc playTetris(jets: Data, num: int): int =
 
 let data = parseData()
 
-echo data.playTetris(2022)
-echo data.playTetris(1_000_000_000_000.int)
+benchmark:
+  echo data.playTetris(2022)
+  echo data.playTetris(1_000_000_000_000.int)

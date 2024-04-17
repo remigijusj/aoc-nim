@@ -31,7 +31,7 @@ func parseInstruction(line: string): Instruction =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.splitLines.map(parseInstruction)
+  readInput().strip.splitLines.map(parseInstruction)
 
 
 template mem(rv): int =

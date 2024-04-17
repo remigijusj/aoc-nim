@@ -9,8 +9,7 @@ My goal is to build self-contained solutions (no external libs) using clean and 
 All code compiles with the current (>= v1.6) Nim compiler, for example: `nim c -r d01`.
 
 To run the solutions:
-- years 2019-2021 just run dXX, which will read data file from input folder.
-- years from 2022 feed input to stdin, e.g. `dXX < input/dXX.txt`, or use the helper script.
+- feed the input to stdin: `dXX < input/dXX.txt`, or use the helper script `aoc`.
 - to use data from clipboard: `pbpaste --lf | dXX`
 
 Helper script to download puzzles/input data and run/test solutions:

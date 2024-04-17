@@ -21,7 +21,7 @@ func parseStep(line: string): Step =
 
 
 proc parseData: Data =
-  readAll(stdin).strip.split(", ").map(parseStep)
+  readInput().strip.split(", ").map(parseStep)
 
 
 func dist(pos: XY): int =
